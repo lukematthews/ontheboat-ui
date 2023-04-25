@@ -1,7 +1,7 @@
 services:
-  frontend:
+  marina-ui:
     build:
       context: .
-    container_name: frontend
+    container_name: marina-ui
     ports:
       - "80:80"

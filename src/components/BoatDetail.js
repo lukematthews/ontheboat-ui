@@ -38,7 +38,8 @@ const BoatDetail = (boat) => {
                         <Col>
                           <QRCode
                             value={
-                              "http://192.168.1.10:3000/signOn?id=" +
+                              process.env.REACT_APP_EXTERNAL_IP +
+                              "/signOn?id=" +
                               boat.boat.id
                             }
                           />
