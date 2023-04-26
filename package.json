@@ -2,12 +2,6 @@
   "name": "marina-ui",
   "version": "0.1.0",
   "private": true,
-  "proxy": {
-    "/api": {
-      "target": "http://marina-api:8080",
-      "changeOrigin": true
-    }
-  },
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
@@ -18,6 +12,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.3.6",
     "bootstrap": "^5.2.3",
+    "http-proxy-middleware": "^2.0.6",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
