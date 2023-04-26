@@ -6,6 +6,9 @@ module.exports = function (app) {
     createProxyMiddleware({
       target: "http://marina-api:8080",
       changeOrigin: true,
+      headers: {
+        Accept: 'application/json'
+      }
     })
   );
 };
