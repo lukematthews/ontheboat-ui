@@ -9,7 +9,7 @@ function SignOn() {
   const [boat, setBoatDetails] = useState({});
   console.log(boatIdValue);
   const loadBoat = async () => {
-    const response = await fetch(`/api/boat-details?boatId=${boatIdValue}`);
+    const response = await fetch(`${process.env.REACT_APP_API_IP}/api/boat-details?boatId=${boatIdValue}`);
     const data = await response.json();
     console.log(data);
     setBoatDetails(data);

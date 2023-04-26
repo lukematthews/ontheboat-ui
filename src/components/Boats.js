@@ -16,7 +16,7 @@ const Boats = () => {
   const [selectedBoat, setSelectedBoat] = useState({});
   const fetchData = async () => {
     const response = await fetch(
-      `/api/boats?page=${paginationModel.page}&size=${paginationModel.pageSize}`
+      `${process.env.REACT_APP_API_IP}/api/boats?page=${paginationModel.page}&size=${paginationModel.pageSize}`
     );
     const data = await response.json();
     updatePage(data);

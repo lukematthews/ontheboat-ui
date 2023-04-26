@@ -12,7 +12,7 @@ const BoatSearch = () => {
 
   const runSearch = (event) => {
     event.preventDefault();
-    fetch("/api/search?search=" + search)
+    fetch(process.env.REACT_APP_API_IP +"/api/search?search=" + search)
       .then((response) => response.json())
       .then((data) => setResults({ rows: data }));
   };

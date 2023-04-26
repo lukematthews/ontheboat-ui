@@ -69,7 +69,7 @@ const BoatDetail = (boat) => {
                   <Card.Img
                     variant="top"
                     onError={(e) => (e.target.src = "")}
-                    src={"/api/boat-photo?id=" + boat.boat.id}
+                    src={process.env.REACT_APP_API_IP +"/api/boat-photo?id=" + boat.boat.id}
                   ></Card.Img>
                   <Container>
                     <Row>
