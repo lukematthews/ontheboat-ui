@@ -1,14 +1,11 @@
-const { createProxyMiddleware } = require("http-proxy-middleware");
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
-module.exports = function (app) {
+module.exports = function(app) {
   app.use(
-    "/api",
+    '/api',
     createProxyMiddleware({
-      target: "http://marina-api:8080",
+      target: 'http://localhost:8080',
       changeOrigin: true,
-      headers: {
-        Accept: 'application/json'
-      }
     })
   );
 };

@@ -2,6 +2,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import BoatDetail from "./BoatDetail";
 import { Col, Row } from "react-bootstrap";
+import BoatDetailModal from "./BoatDetail";
 
 const Boats = () => {
   const [page, setPage] = useState({
@@ -16,7 +17,7 @@ const Boats = () => {
   const [selectedBoat, setSelectedBoat] = useState({});
   const fetchData = async () => {
     const response = await fetch(
-      `${process.env.REACT_APP_API_IP}/api/boats?page=${paginationModel.page}&size=${paginationModel.pageSize}`
+      `/api/boats?page=${paginationModel.page}&size=${paginationModel.pageSize}`
     );
     const data = await response.json();
     updatePage(data);
@@ -51,8 +52,24 @@ const Boats = () => {
         <div style={{ width: "100%", height: "400px" }}>
           <DataGrid
             columns={[
-              { field: "boatName", headerName: "Name", width: 150, headerClassName: 'bg-light'},
-              { field: "sailNumber", headerName: "Sail Number", width: 150, headerClassName: 'bg-light' },
+              {
+                field: "boatName",
+                headerName: "Name",
+                width: 150,
+                headerClassName: "bg-light",
+              },
+              {
+                field: "sailNumber",
+                headerName: "Sail Number",
+                width: 150,
+                headerClassName: "bg-light",
+              },
+              {
+                field: "design",
+                headerName: "Design",
+                width: 150,
+                headerClassName: "bg-light",
+              },
             ]}
             pageSizeOptions={[5, 10, 20, 100]}
             rowCount={page.rowCount}
@@ -63,11 +80,7 @@ const Boats = () => {
             onRowSelectionModelChange={(data) => selectionChanged(data)}
           />
         </div>
-      </Col>
-      <Col md="7">
-        <div className="mt-2">
-          <BoatDetail boat={selectedBoat}></BoatDetail>{" "}
-        </div>
+        <BoatDetail boat={selectedBoat}></BoatDetail>
       </Col>
     </Row>
   );

@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { DataGrid } from "@mui/x-data-grid";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 
 const BoatSearch = () => {
   const [show, setShow] = useState(false);
@@ -9,15 +15,36 @@ const BoatSearch = () => {
   const handleShow = () => setShow(true);
   const [search, setSearch] = useState("");
   const [results, setResults] = useState({ rows: [] });
+  const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const runSearch = (event) => {
     event.preventDefault();
-    fetch(process.env.REACT_APP_API_IP +"/api/search?search=" + search)
+    fetch("/api/search?search=" + search)
       .then((response) => response.json())
       .then((data) => setResults({ rows: data }));
   };
 
-  const nbRows = 10;
+  const handleListItemClick = (event, index) => {
+    setSelectedIndex(index);
+  };
+
+  const resultList = results.rows.map((result, index) => (
+    <ListItemButton
+      selected={selectedIndex === index}
+      onClick={(event) => handleListItemClick(event, index)}
+    >
+      <ListItemIcon>
+        <ListItemIcon>
+          {selectedIndex === index ? (
+            <CheckCircleIcon></CheckCircleIcon>
+          ) : (
+            <RadioButtonUncheckedIcon></RadioButtonUncheckedIcon>
+          )}
+        </ListItemIcon>
+      </ListItemIcon>
+      <ListItemText primary={`${result.boatName} ${result.sailNumber}`} />
+    </ListItemButton>
+  ));
 
   return (
     <>
@@ -43,30 +70,20 @@ const BoatSearch = () => {
                 Search
               </Button>
 
-              <DataGrid style={{height: "300px"}}
-                {...results}
-                columns={[
-                  {
-                    field: "boatName",
-                    headerName: "Name",
-                    width: 150,
-                    headerClassName: "bg-light",
-                  },
-                  {
-                    field: "sailNumber",
-                    headerName: "Sail Number",
-                    width: 150,
-                    headerClassName: "bg-light",
-                  },
-                ]}
-                rows={results.rows}
-                hideFooterPagination
-                hideFooterSelectedRowCount
-                hideFooter
-                slots={{
-                  columnHeaders: () => null,
+              <List
+                component="nav"
+                aria-label="main mailbox folders"
+                className="rounded border"
+                sx={{
+                  width: "100%",
+                  position: "relative",
+                  overflow: "auto",
+                  maxHeight: 300,
+                  "& ul": { padding: 0 },
                 }}
-              />
+              >
+                {resultList}
+              </List>
             </Form.Group>
           </Form>
         </Modal.Body>
