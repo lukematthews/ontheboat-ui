@@ -2,24 +2,31 @@ import { useEffect, useState } from "react";
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import BoatSearch from "./BoatSearch";
+import { useSelector } from "react-redux";
+import { gridColumnsTotalWidthSelector } from "@mui/x-data-grid";
 
 function SignOn() {
   let [boatId] = useSearchParams();
   let boatIdValue = boatId.get("id");
+  const [loading, setLoading] = useState("Loading");
+
   const [boat, setBoatDetails] = useState({});
-  console.log(boatIdValue);
+  const selectedBoat = useSelector((state) => state.selectedBoat);
+  boatIdValue =
+    !boatIdValue || boatIdValue === null ? selectedBoat.value.id : null;
   const loadBoat = async () => {
     const response = await fetch(`/api/boat-details?boatId=${boatIdValue}`);
     const data = await response.json();
     console.log(data);
     setBoatDetails(data);
+    setLoading("");
   };
 
   useEffect(() => {
-    if (boatIdValue) {
+    if (boatIdValue && loading !== "") {
       loadBoat();
     }
-  }, [boatIdValue]);
+  }, [boatIdValue, loading]);
 
   const displayBoat = () => {
     return (
@@ -36,7 +43,9 @@ function SignOn() {
         <div>
           <h1>Sign On</h1>
           <p>Use this page to sign yourself as being on board a boat.</p>
-          <p><BoatSearch></BoatSearch></p>
+          <p>
+            <BoatSearch></BoatSearch>
+          </p>
         </div>
         <div></div>
       </>
@@ -46,7 +55,9 @@ function SignOn() {
   return (
     <Container>
       <Row>
-        <Col>{boatIdValue ? displayBoat() : noBoat()}</Col>
+        <Col>
+          <div>{boatIdValue ? displayBoat() : noBoat()}</div>
+        </Col>
       </Row>
       <Row>
         <Col>

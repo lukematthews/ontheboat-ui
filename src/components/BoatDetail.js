@@ -2,14 +2,15 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import QRCode from "react-qr-code";
-import { Accordion, Button, Card, Modal } from "react-bootstrap";
+import { Button, Card, Modal } from "react-bootstrap";
 import { useState, useEffect } from "react";
+import { Paper } from "@mui/material";
+import { grey } from '@mui/material/colors';
 
 const BoatDetail = (props) => {
   const [show, setShow] = useState(true);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   let boatDetails = props.boat && props.boat.boatDetails;
 
@@ -54,11 +55,13 @@ const BoatDetail = (props) => {
                   <Container>
                     <Row>
                       <Col>
-                        <Card.Img
-                          variant="top"
-                          onError={(e) => (e.target.src = "")}
-                          src={"/api/boat-photo?id=" + props.boat.id}
-                        ></Card.Img>
+                        <Paper elevation={6} sx={{backgroundColor: grey[500], height: '100%'}}>
+                          <Card.Img
+                            variant="top"
+                            onError={(e) => (e.target.src = "")}
+                            src={"/api/boat-photo?id=" + props.boat.id}
+                          ></Card.Img>
+                        </Paper>
                       </Col>
                       <Col>
                         <Container>
@@ -75,7 +78,7 @@ const BoatDetail = (props) => {
                           </Row>
                           <Row className="mt-2">
                             {field("Hull Material", "hullMaterial")}
-                            {field("Length Overall", "lengthOverall")}
+                            {field("Length", "lengthOverall")}
                           </Row>
                           <Row className="mt-2">
                             {field("Rig", "rig")}

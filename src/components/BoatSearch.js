@@ -1,17 +1,25 @@
 import { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import { DataGrid } from "@mui/x-data-grid";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedBoat } from "../features/selectedBoatSlice";
 
 const BoatSearch = () => {
   const [show, setShow] = useState(false);
+  const dispatch = useDispatch();
+  const selectedBoat = useSelector((state) => state.selectedBoat);
 
-  const handleClose = () => setShow(false);
+  const handleClose = (event) => {
+    console.log("event: " + event);
+    setShow(false);
+    let boat = results.rows[selectedIndex];
+    dispatch(setSelectedBoat(boat));
+  };
   const handleShow = () => setShow(true);
   const [search, setSearch] = useState("");
   const [results, setResults] = useState({ rows: [] });
@@ -30,6 +38,7 @@ const BoatSearch = () => {
 
   const resultList = results.rows.map((result, index) => (
     <ListItemButton
+      key={result.id}
       selected={selectedIndex === index}
       onClick={(event) => handleListItemClick(event, index)}
     >
@@ -57,7 +66,12 @@ const BoatSearch = () => {
         </Modal.Header>
         <Modal.Body>
           To sign on, you'll need to find a boat to sign on to.
-          <Form className="mt-2">
+          <Form
+            className="mt-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
+          >
             <Form.Group>
               <Form.Control
                 value={search}
@@ -88,10 +102,10 @@ const BoatSearch = () => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={(e) => handleClose()}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={(e) => handleClose(e)}>
             Sign on
           </Button>
         </Modal.Footer>

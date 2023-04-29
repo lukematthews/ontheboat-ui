@@ -43,7 +43,7 @@ const Boats = () => {
   }, [paginationModel]);
 
   const selectionChanged = (boat) => {
-    setSelectedBoat(page.content.find((row) => row.id == boat));
+    setSelectedBoat({...page.content.find((row) => row.id == boat)});
   };
 
   return (
