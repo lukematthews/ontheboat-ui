@@ -13,7 +13,7 @@ function SignOn() {
   const [boat, setBoatDetails] = useState({});
   const selectedBoat = useSelector((state) => state.selectedBoat);
   boatIdValue =
-    !boatIdValue || boatIdValue === null ? selectedBoat.value.id : null;
+    !boatIdValue || boatIdValue === null ? selectedBoat.value.id : boatIdValue;
   const loadBoat = async () => {
     const response = await fetch(`/api/boat-details?boatId=${boatIdValue}`);
     const data = await response.json();
