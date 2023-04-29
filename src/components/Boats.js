@@ -1,8 +1,9 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import BoatDetail from "./BoatDetail";
-import { Col, Row } from "react-bootstrap";
+import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import BoatDetailModal from "./BoatDetail";
+import { Search } from "@mui/icons-material";
 
 const Boats = () => {
   const [page, setPage] = useState({
@@ -14,6 +15,7 @@ const Boats = () => {
     rowCount: 0,
     content: [],
   });
+  const [search, setSearch] = useState("");
   const [selectedBoat, setSelectedBoat] = useState({});
   const fetchData = async () => {
     const response = await fetch(
@@ -26,6 +28,14 @@ const Boats = () => {
     page: 0,
     pageSize: 10,
   });
+
+  const doSearch = async () => {
+    const response = await fetch(
+      `/api/search-page?search=${search}&page=${paginationModel.page}&size=${paginationModel.pageSize}`
+    );
+    const data = await response.json();
+    updatePage(data);
+  }
 
   const updatePage = (data) => {
     let newPage = { ...data };
@@ -49,6 +59,19 @@ const Boats = () => {
   return (
     <Row>
       <Col>
+        <InputGroup>
+        <Form.Control
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                type="text"
+                className="mb-2"
+                placeholder="Name, Sail number, Contact"
+              ></Form.Control>
+              <div className="input-group-append">
+                <Button onClick={(e) => doSearch()}><Search></Search></Button>
+              </div>
+        </InputGroup>
+
         <div style={{ width: "100%", height: "400px" }}>
           <DataGrid
             columns={[
