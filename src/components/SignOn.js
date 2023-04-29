@@ -3,7 +3,6 @@ import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import BoatSearch from "./BoatSearch";
 import { useSelector } from "react-redux";
-import { gridColumnsTotalWidthSelector } from "@mui/x-data-grid";
 
 function SignOn() {
   let [boatId] = useSearchParams();

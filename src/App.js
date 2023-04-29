@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import Boats from "./components/Boats";
 import SignOn from "./components/SignOn";
 import Home from "./components/Home";
+import Print from "./components/Print";
 import { Container, Row, Col, Navbar, Nav } from "react-bootstrap";
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
                 <Route path="/boats" element={<Boats />}></Route>
                 <Route path="/" element={<Home/>}></Route>
                 <Route path="/signOn" element={<SignOn />}></Route>
+                <Route path="/print" element={<Print/>}></Route>
               </Routes>
             </div>
           </Col>

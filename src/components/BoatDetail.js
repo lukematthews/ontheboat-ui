@@ -101,6 +101,9 @@ const BoatDetail = (props) => {
                                     Use this QR code to scan it from a mobile
                                     and sign crew onto the boat.
                                   </div>
+                                  <div>
+                                    <a href={`/print?id=${props.boat.id}`}>Printable copy</a>
+                                  </div>
                                   <div
                                     className="mt-2"
                                     style={{ width: "100%" }}
