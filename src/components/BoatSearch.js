@@ -17,8 +17,12 @@ const BoatSearch = () => {
   const handleClose = (event) => {
     console.log("event: " + event);
     setShow(false);
-    let boat = results.rows[selectedIndex];
-    dispatch(setSelectedBoat(boat));
+    if (event) {
+      let boat = results.rows[selectedIndex];
+      dispatch(setSelectedBoat(boat));
+    } else {
+      dispatch(setSelectedBoat({}));
+    }
   };
   const handleShow = () => setShow(true);
   const [search, setSearch] = useState("");
