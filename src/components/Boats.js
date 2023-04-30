@@ -18,8 +18,11 @@ const Boats = () => {
   const [search, setSearch] = useState("");
   const [selectedBoat, setSelectedBoat] = useState({});
   const fetchData = async () => {
+    // const response = await fetch(
+    //   `/api/boats?page=${paginationModel.page}&size=${paginationModel.pageSize}`
+    // );
     const response = await fetch(
-      `/api/boats?page=${paginationModel.page}&size=${paginationModel.pageSize}`
+      `/api/search-page?search=${search}&page=${paginationModel.page}&size=${paginationModel.pageSize}`
     );
     const data = await response.json();
     updatePage(data);

@@ -13,6 +13,15 @@ function SignOn() {
   const selectedBoat = useSelector((state) => state.selectedBoat);
   boatIdValue =
     !boatIdValue || boatIdValue === null ? selectedBoat.value.id : boatIdValue;
+  const [crewRequest, setCrewRequest] = useState({
+    boatId: boatIdValue,
+    firstName: "",
+    lastName: "",
+    mobile: "",
+    email: "",
+    rememberMe: true,
+  });
+
   const loadBoat = async () => {
     const response = await fetch(`/api/boat-details?boatId=${boatIdValue}`);
     const data = await response.json();
@@ -26,6 +35,15 @@ function SignOn() {
       loadBoat();
     }
   }, [boatIdValue, loading]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let res = await fetch("/api/sign-on", {
+      method: "POST",
+      body: JSON.stringify(crewRequest),
+      headers: {"Content-Type": "application/json",}
+    });
+  };
 
   const displayBoat = () => {
     return (
@@ -60,36 +78,72 @@ function SignOn() {
       </Row>
       <Row>
         <Col>
-          <Form autoComplete="on">
+          <Form
+            autoComplete="on"
+            action="/api/sign-on"
+            method="post"
+            onSubmit={handleSubmit}
+          >
+            <Form.Control
+              type="text"
+              style={{ display: "none" }}
+              value={boatIdValue}
+            ></Form.Control>
             <Form.Group controlId="formLastName">
               <Form.Label>First name</Form.Label>
               <Form.Control
+                id="firstName"
                 type="text"
                 placeholder="First Name"
                 autoComplete="first-name"
+                onChange={(e) => {
+                  crewRequest.firstName = e.target.value;
+                  setCrewRequest(crewRequest);
+                }}
               />
               <Form.Label>Last name</Form.Label>
               <Form.Control
+                id="lastName"
                 type="text"
                 placeholder="Last Name"
                 autoComplete="family-name"
+                onChange={(e) => {
+                  crewRequest.lastName = e.target.value;
+                  setCrewRequest(crewRequest);
+                }}
               />
               <Form.Label>Mobile</Form.Label>
               <Form.Control
+                id="mobile"
                 type="text"
                 placeholder="Mobile"
                 autoComplete="tel"
+                onChange={(e) => {
+                  crewRequest.mobile = e.target.value;
+                  setCrewRequest(crewRequest);
+                }}
               />
               <Form.Label>Email</Form.Label>
               <Form.Control
+                id="email"
                 type="text"
                 placeholder="Email"
                 autoComplete="email"
+                onChange={(e) => {
+                  crewRequest.email = e.target.value;
+                  setCrewRequest(crewRequest);
+                }}
+              />
+              <Form.Check
+                id="rememberMe"
+                type="checkbox"
+                label="Remember me"
+                value={crewRequest.rememberMe}
               />
             </Form.Group>
             <div className="mb-3"></div>
             <Form.Group>
-              <Button variant="primary" size="lg">
+              <Button variant="primary" size="lg" type="submit">
                 Onboard
               </Button>
             </Form.Group>
