@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button, Form, InputGroup } from "react-bootstrap";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -8,6 +8,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedBoat } from "../features/selectedBoatSlice";
+import { Search } from "@mui/icons-material";
 
 const BoatSearch = () => {
   const [show, setShow] = useState(false);
@@ -30,6 +31,10 @@ const BoatSearch = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const runSearch = (event) => {
+    if (!search) {
+      setResults({rows: []});
+      return;
+    }
     event.preventDefault();
     fetch("/api/search?search=" + search)
       .then((response) => response.json())
@@ -73,27 +78,32 @@ const BoatSearch = () => {
           <Form
             className="mt-2"
             onSubmit={(e) => {
-              e.preventDefault();
+              runSearch(e);
             }}
           >
             <Form.Group>
-              <Form.Control
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                type="text"
-                className="mb-2"
-                placeholder="Name, Sail number, Contact"
-              ></Form.Control>
-              <Button variant="primary" onClick={(event) => runSearch(event)}>
-                Search
-              </Button>
-
+              <InputGroup>
+                <Form.Control
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  type="text"
+                  className="mb-2"
+                  placeholder="Name, Sail number, Contact"
+                  autoFocus
+                ></Form.Control>
+                <div className="input-group-append">
+                  <Button onClick={(e) => runSearch(e)}>
+                    <Search></Search>
+                  </Button>
+                </div>
+              </InputGroup>
               <List
                 component="nav"
                 aria-label="main mailbox folders"
                 className="rounded border"
                 sx={{
                   width: "100%",
+                  height: 300,
                   position: "relative",
                   overflow: "auto",
                   maxHeight: 300,

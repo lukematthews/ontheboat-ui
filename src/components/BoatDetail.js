@@ -5,7 +5,7 @@ import QRCode from "react-qr-code";
 import { Button, Card, Modal } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { Paper } from "@mui/material";
-import { grey } from '@mui/material/colors';
+import { grey } from "@mui/material/colors";
 
 const BoatDetail = (props) => {
   const [show, setShow] = useState(true);
@@ -24,14 +24,14 @@ const BoatDetail = (props) => {
 
     return (
       <>
-        <Col>
+        <div className="col-xs-12 col-lg-3">
           <span className="fw-bold ">{name}</span>
-        </Col>
-        <Col>
+        </div>
+        <div className="col-xs-12 col-lg-3">
           <p className={fieldClass + " "}>
             <span>{boatDetails[field] || "-"}</span>
           </p>
-        </Col>
+        </div>
       </>
     );
   };
@@ -54,15 +54,18 @@ const BoatDetail = (props) => {
                 <Modal.Body>
                   <Container>
                     <Row>
-                      <Col>
-                        <Paper elevation={6} sx={{backgroundColor: grey[500], height: '100%'}}>
+                      <div className="col-xs-12 col-lg-6">
+                        <Paper
+                          elevation={6}
+                          sx={{ backgroundColor: grey[500], height: "100%" }}
+                        >
                           <Card.Img
                             variant="top"
                             onError={(e) => (e.target.src = "")}
                             src={"/api/boat-photo?id=" + props.boat.id}
                           ></Card.Img>
                         </Paper>
-                      </Col>
+                      </div>
                       <Col>
                         <Container>
                           <Row>
@@ -102,7 +105,9 @@ const BoatDetail = (props) => {
                                     and sign crew onto the boat.
                                   </div>
                                   <div>
-                                    <a href={`/print?id=${props.boat.id}`}>Printable copy</a>
+                                    <a href={`/print?id=${props.boat.id}`}>
+                                      Printable copy
+                                    </a>
                                   </div>
                                   <div
                                     className="mt-2"

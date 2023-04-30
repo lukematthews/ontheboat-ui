@@ -18,9 +18,6 @@ const Boats = () => {
   const [search, setSearch] = useState("");
   const [selectedBoat, setSelectedBoat] = useState({});
   const fetchData = async () => {
-    // const response = await fetch(
-    //   `/api/boats?page=${paginationModel.page}&size=${paginationModel.pageSize}`
-    // );
     const response = await fetch(
       `/api/search-page?search=${search}&page=${paginationModel.page}&size=${paginationModel.pageSize}`
     );
@@ -38,7 +35,7 @@ const Boats = () => {
     );
     const data = await response.json();
     updatePage(data);
-  }
+  };
 
   const updatePage = (data) => {
     let newPage = { ...data };
@@ -56,24 +53,30 @@ const Boats = () => {
   }, [paginationModel]);
 
   const selectionChanged = (boat) => {
-    setSelectedBoat({...page.content.find((row) => row.id == boat)});
+    setSelectedBoat({ ...page.content.find((row) => row.id == boat) });
   };
 
   return (
     <Row>
       <Col>
-        <InputGroup>
-        <Form.Control
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                type="text"
-                className="mb-2"
-                placeholder="Name, Sail number, Contact"
-              ></Form.Control>
-              <div className="input-group-append">
-                <Button onClick={(e) => doSearch()}><Search></Search></Button>
-              </div>
-        </InputGroup>
+        <Form onSubmit={(e) => {e.preventDefault(); doSearch();}
+        }>
+          <InputGroup>
+            <Form.Control
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              type="text"
+              className="mb-2"
+              placeholder="Name, Sail number, Contact"
+              autoFocus
+            ></Form.Control>
+            <div className="input-group-append">
+              <Button onClick={(e) => doSearch()}>
+                <Search></Search>
+              </Button>
+            </div>
+          </InputGroup>
+        </Form>
 
         <div style={{ width: "100%", height: "400px" }}>
           <DataGrid
