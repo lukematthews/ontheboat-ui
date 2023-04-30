@@ -2,7 +2,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import QRCode from "react-qr-code";
-import { Button, Card, Modal } from "react-bootstrap";
+import { Button, Card, Modal, Accordion, Table } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { Paper } from "@mui/material";
 import { grey } from "@mui/material/colors";
@@ -35,6 +35,10 @@ const BoatDetail = (props) => {
       </>
     );
   };
+
+  const parseNewLines = (text) => {
+    return text.split("\n").map(line => <><span>{line}</span><br/></>);
+  }
 
   return (
     <>
@@ -71,7 +75,7 @@ const BoatDetail = (props) => {
                           <Row>
                             <Col>
                               <p>
-                                <span>{boatDetails.bio}</span>
+                                <span>{parseNewLines(boatDetails.bio)}</span>
                               </p>
                             </Col>
                           </Row>
@@ -120,6 +124,44 @@ const BoatDetail = (props) => {
                                       Sign On to {boatDetails.boatName}
                                     </Button>
                                   </div>
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col className="pt-2">
+                                  <Accordion defaultActiveKey="0" flush>
+                                    <Accordion.Item eventKey="0">
+                                      <Accordion.Header>
+                                        Handicaps
+                                      </Accordion.Header>
+                                      <Accordion.Body>
+                                        <Table>
+                                          <thead>
+                                            <tr>
+                                              <th>Type</th>
+                                              <th>Rating</th>
+                                              <th>Cert #</th>
+                                              <th>Expiry</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                          {props.boat.handicaps.map(
+                                            (handicap) => {
+                                              return (
+                                                <tr id={handicap.id}>
+                                                  <td>{handicap.handicapType}</td>
+                                                  <td>{handicap.rating}</td>
+                                                  <td>{handicap.certificate}</td>
+                                                  <td>{handicap.expiryDate}</td>
+                                                </tr>
+                                              );
+                                            }
+                                          )}
+
+                                          </tbody>
+                                        </Table>
+                                      </Accordion.Body>
+                                    </Accordion.Item>
+                                  </Accordion>
                                 </Col>
                               </Row>
                             </Container>
