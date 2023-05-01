@@ -6,6 +6,7 @@ import { Button, Card, Modal, Accordion, Table } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { Paper } from "@mui/material";
 import { grey } from "@mui/material/colors";
+import Handicaps from "./Handicaps";
 
 const BoatDetail = (props) => {
   const [show, setShow] = useState(true);
@@ -20,7 +21,7 @@ const BoatDetail = (props) => {
 
   const field = (name, field) => {
     // field
-    let fieldClass = field ? "px-1 border rounded-1" : "";
+    let fieldClass = field ? "px-1 mb-1 border rounded-1" : "";
 
     return (
       <>
@@ -37,8 +38,13 @@ const BoatDetail = (props) => {
   };
 
   const parseNewLines = (text) => {
-    return text.split("\n").map(line => <><span>{line}</span><br/></>);
-  }
+    return text.split("\n").map((line) => (
+      <>
+        <span>{line}</span>
+        <br />
+      </>
+    ));
+  };
 
   return (
     <>
@@ -83,11 +89,11 @@ const BoatDetail = (props) => {
                             {field("Design", "design")}
                             {field("Colour", "hullColour")}
                           </Row>
-                          <Row className="mt-2">
+                          <Row className="mt-0">
                             {field("Hull Material", "hullMaterial")}
                             {field("Length", "lengthOverall")}
                           </Row>
-                          <Row className="mt-2">
+                          <Row className="mt-0">
                             {field("Rig", "rig")}
                             {field("Launch Year", "launchYear")}
                           </Row>
@@ -134,31 +140,7 @@ const BoatDetail = (props) => {
                                         Handicaps
                                       </Accordion.Header>
                                       <Accordion.Body>
-                                        <Table>
-                                          <thead>
-                                            <tr>
-                                              <th>Type</th>
-                                              <th>Rating</th>
-                                              <th>Cert #</th>
-                                              <th>Expiry</th>
-                                            </tr>
-                                          </thead>
-                                          <tbody>
-                                          {props.boat.handicaps.map(
-                                            (handicap) => {
-                                              return (
-                                                <tr id={handicap.id}>
-                                                  <td>{handicap.handicapType}</td>
-                                                  <td>{handicap.rating}</td>
-                                                  <td>{handicap.certificate}</td>
-                                                  <td>{handicap.expiryDate}</td>
-                                                </tr>
-                                              );
-                                            }
-                                          )}
-
-                                          </tbody>
-                                        </Table>
+                                        <Handicaps handicaps={props.boat.handicaps}></Handicaps>
                                       </Accordion.Body>
                                     </Accordion.Item>
                                   </Accordion>
