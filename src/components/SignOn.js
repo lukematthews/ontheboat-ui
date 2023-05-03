@@ -41,7 +41,7 @@ function SignOn() {
     let res = await fetch("/api/sign-on", {
       method: "POST",
       body: JSON.stringify(crewRequest),
-      headers: {"Content-Type": "application/json",}
+      headers: { "Content-Type": "application/json" },
     });
   };
 
@@ -88,11 +88,11 @@ function SignOn() {
               type="text"
               style={{ display: "none" }}
               value={boatIdValue}
+              readOnly
             ></Form.Control>
-            <Form.Group controlId="formLastName">
+            <Form.Group controlId="firstName">
               <Form.Label>First name</Form.Label>
               <Form.Control
-                id="firstName"
                 type="text"
                 placeholder="First Name"
                 autoComplete="first-name"
@@ -101,9 +101,10 @@ function SignOn() {
                   setCrewRequest(crewRequest);
                 }}
               />
+            </Form.Group>
+            <Form.Group controlId="lastName">
               <Form.Label>Last name</Form.Label>
               <Form.Control
-                id="lastName"
                 type="text"
                 placeholder="Last Name"
                 autoComplete="family-name"
@@ -112,9 +113,10 @@ function SignOn() {
                   setCrewRequest(crewRequest);
                 }}
               />
+            </Form.Group>
+            <Form.Group controlId="mobile">
               <Form.Label>Mobile</Form.Label>
               <Form.Control
-                id="mobile"
                 type="text"
                 placeholder="Mobile"
                 autoComplete="tel"
@@ -123,9 +125,10 @@ function SignOn() {
                   setCrewRequest(crewRequest);
                 }}
               />
+            </Form.Group>
+            <Form.Group controlId="email">
               <Form.Label>Email</Form.Label>
               <Form.Control
-                id="email"
                 type="text"
                 placeholder="Email"
                 autoComplete="email"
@@ -134,11 +137,28 @@ function SignOn() {
                   setCrewRequest(crewRequest);
                 }}
               />
+            </Form.Group>
+            <Form.Group controlId="duration">
+              <Form.Select
+                type="select"
+                label="How long?"
+                onChange={(e) => {
+                  crewRequest.rememberMe = e.target.checked;
+                  setCrewRequest(crewRequest);
+                }}
+              >
+                <option>Today</option>
+                <option>For the race</option>
+              </Form.Select>
+            </Form.Group>
+            <Form.Group controlId="rememberMe">
               <Form.Check
-                id="rememberMe"
                 type="checkbox"
                 label="Remember me"
-                value={crewRequest.rememberMe}
+                onChange={(e) => {
+                  crewRequest.rememberMe = e.target.checked;
+                  setCrewRequest(crewRequest);
+                }}
               />
             </Form.Group>
             <div className="mb-3"></div>

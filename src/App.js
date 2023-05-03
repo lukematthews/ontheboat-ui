@@ -4,7 +4,7 @@ import SignOn from "./components/SignOn";
 import Home from "./components/Home";
 import Print from "./components/Print";
 import { Container, Row, Col, Navbar, Nav } from "react-bootstrap";
-
+import CookieConsent from "react-cookie-consent";
 function App() {
   return (
     <Router>
@@ -15,33 +15,46 @@ function App() {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Item href="/boats">
-                <Nav.Link>
-                  <Link to="/boats" className="nav-link active">
-                    Boat register
-                  </Link>
-                </Nav.Link>
+                <Link role="button" to="/boats" className="nav-link active">
+                  Boat register
+                </Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link>
-                  <Link to="/signOn" className="nav-link">Sign On</Link>
-                </Nav.Link>
+                <Link role="button" to="/signOn" className="nav-link">
+                  Sign On
+                </Link>
               </Nav.Item>
             </Nav>
           </Navbar.Collapse>
         </div>
       </Navbar>
-      <Container className="mt-6" style={{marginTop: "100px"}}>
+      <Container className="mt-6" style={{ marginTop: "100px" }}>
         <Row>
           <Col>
             <div className="App">
               <Routes>
                 <Route path="/boats" element={<Boats />}></Route>
-                <Route path="/" element={<Home/>}></Route>
+                <Route path="/" element={<Home />}></Route>
                 <Route path="/signOn" element={<SignOn />}></Route>
-                <Route path="/print" element={<Print/>}></Route>
+                <Route path="/print" element={<Print />}></Route>
               </Routes>
             </div>
           </Col>
+        </Row>
+        <Row>
+          <CookieConsent
+            location="bottom"
+            buttonText="Accept"
+            enableDeclineButton="true"
+            flipButtons="true"
+            declineButtonText="No"
+            cookieName="cookiesEnabled"
+            style={{ background: "green" }}
+            buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
+            expires={150}
+          >
+            This website uses cookies to help signing on to a boat easier.
+          </CookieConsent>
         </Row>
       </Container>
     </Router>
