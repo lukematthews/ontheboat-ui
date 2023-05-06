@@ -3,16 +3,28 @@ import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import BoatSearch from "./BoatSearch";
 import { useSelector } from "react-redux";
+import { useCookies } from "react-cookie";
 
 function SignOn() {
   let [boatId] = useSearchParams();
-  let boatIdValue = boatId.get("id");
+  let boatIdValue;
   const [loading, setLoading] = useState("Loading");
-
   const [boat, setBoatDetails] = useState({});
+  const [cookies, setCookie] = useCookies(["boatweb"]);
   const selectedBoat = useSelector((state) => state.selectedBoat);
-  boatIdValue =
-    !boatIdValue || boatIdValue === null ? selectedBoat.value.id : boatIdValue;
+
+  // has a boat id been passed in via the props? use that.
+  // is there a boat in redux? use that.
+  // is there a boat in the cookies? use that.
+  // otherwise. No boat!
+  if (boatId.get("id")) {
+    boatIdValue = boatId.get("id");
+  } else if (selectedBoat.value.id) {
+    boatIdValue = selectedBoat.value.id;
+  } else if (cookies.lastBoatOnboard) {
+    boatIdValue = cookies.lastBoatOnboard;
+  }
+
   const [crewRequest, setCrewRequest] = useState({
     boatId: boatIdValue,
     firstName: "",
@@ -25,12 +37,18 @@ function SignOn() {
   const loadBoat = async () => {
     const response = await fetch(`/api/boat-details?boatId=${boatIdValue}`);
     const data = await response.json();
-    console.log(data);
     setBoatDetails(data);
     setLoading("");
   };
 
   useEffect(() => {
+    if (cookies.lastBoatOnboard) {
+      boatIdValue = cookies.lastBoatOnboard;
+    }
+
+    if (cookies.crewUUID) {
+      loadCrew(cookies.crewUUID);
+    }
     if (boatIdValue && loading !== "") {
       loadBoat();
     }
@@ -38,11 +56,20 @@ function SignOn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    crewRequest.boatId = boatIdValue;
     let res = await fetch("/api/sign-on", {
       method: "POST",
       body: JSON.stringify(crewRequest),
       headers: { "Content-Type": "application/json" },
     });
+  };
+
+  const loadCrew = async (crewId) => {
+    let res = await fetch(`/api/find-by-id?uuid=${crewId}`, {
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((data) => setCrewRequest(data));
   };
 
   const displayBoat = () => {
@@ -78,12 +105,7 @@ function SignOn() {
       </Row>
       <Row>
         <Col>
-          <Form
-            autoComplete="on"
-            action="/api/sign-on"
-            method="post"
-            onSubmit={handleSubmit}
-          >
+          <Form autoComplete="on" onSubmit={handleSubmit}>
             <Form.Control
               type="text"
               style={{ display: "none" }}
@@ -96,6 +118,7 @@ function SignOn() {
                 type="text"
                 placeholder="First Name"
                 autoComplete="first-name"
+                value={crewRequest.firstName}
                 onChange={(e) => {
                   crewRequest.firstName = e.target.value;
                   setCrewRequest(crewRequest);
@@ -108,6 +131,7 @@ function SignOn() {
                 type="text"
                 placeholder="Last Name"
                 autoComplete="family-name"
+                value={crewRequest.lastName}
                 onChange={(e) => {
                   crewRequest.lastName = e.target.value;
                   setCrewRequest(crewRequest);
@@ -120,6 +144,7 @@ function SignOn() {
                 type="text"
                 placeholder="Mobile"
                 autoComplete="tel"
+                value={crewRequest.mobile}
                 onChange={(e) => {
                   crewRequest.mobile = e.target.value;
                   setCrewRequest(crewRequest);
@@ -132,6 +157,7 @@ function SignOn() {
                 type="text"
                 placeholder="Email"
                 autoComplete="email"
+                value={crewRequest.email}
                 onChange={(e) => {
                   crewRequest.email = e.target.value;
                   setCrewRequest(crewRequest);
@@ -139,6 +165,7 @@ function SignOn() {
               />
             </Form.Group>
             <Form.Group controlId="duration">
+              <Form.Label>How long?</Form.Label>
               <Form.Select
                 type="select"
                 label="How long?"
@@ -155,6 +182,7 @@ function SignOn() {
               <Form.Check
                 type="checkbox"
                 label="Remember me"
+                value={crewRequest.rememberMe}
                 onChange={(e) => {
                   crewRequest.rememberMe = e.target.checked;
                   setCrewRequest(crewRequest);
@@ -164,7 +192,7 @@ function SignOn() {
             <div className="mb-3"></div>
             <Form.Group>
               <Button variant="primary" size="lg" type="submit">
-                Onboard
+                I'm Onboard
               </Button>
             </Form.Group>
           </Form>

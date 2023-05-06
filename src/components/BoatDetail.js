@@ -97,56 +97,71 @@ const BoatDetail = (props) => {
                             {field("Rig", "rig")}
                             {field("Launch Year", "launchYear")}
                           </Row>
+                        </Container><Container>
                           <Row>
-                            <Container>
-                              <Row>
-                                <Col>
-                                  <QRCode
-                                    value={
-                                      process.env.REACT_APP_EXTERNAL_IP +
-                                      "/signOn?id=" +
-                                      props.boat.id
-                                    }
-                                  />
-                                </Col>
-                                <Col>
-                                  <div>
-                                    Use this QR code to scan it from a mobile
-                                    and sign crew onto the boat.
-                                  </div>
-                                  <div>
-                                    <a href={`/print?id=${props.boat.id}`}>
-                                      Printable copy
-                                    </a>
-                                  </div>
-                                  <div
-                                    className="mt-2"
-                                    style={{ width: "100%" }}
-                                  >
-                                    <Button
-                                      style={{ width: "100%" }}
-                                      href={"/signOn?id=" + props.boat.id}
-                                    >
-                                      Sign On to {boatDetails.boatName}
-                                    </Button>
-                                  </div>
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Col className="pt-2">
-                                  <Accordion defaultActiveKey="0" flush>
-                                    <Accordion.Item eventKey="0">
-                                      <Accordion.Header>
-                                        Handicaps
-                                      </Accordion.Header>
-                                      <Accordion.Body>
-                                        <Handicaps handicaps={props.boat.handicaps}></Handicaps>
-                                      </Accordion.Body>
-                                    </Accordion.Item>
-                                  </Accordion>
-                                </Col>
-                              </Row>
-                            </Container>
+                            <Col>
+                              <Accordion flush>
+                                <Accordion.Item eventKey="0">
+                                  <Accordion.Header>Sign On</Accordion.Header>
+                                  <Accordion.Body>
+                                    <Container>
+                                      <Row>
+                                        <Col>
+                                          <QRCode
+                                            value={
+                                              process.env
+                                                .REACT_APP_EXTERNAL_IP +
+                                              "/signOn?id=" +
+                                              props.boat.id
+                                            }
+                                          />
+                                        </Col>
+                                        <Col>
+                                          <div>
+                                            Use this QR code to scan it from a
+                                            mobile and sign crew onto the boat.
+                                          </div>
+                                          <div>
+                                            <a
+                                              href={`/print?id=${props.boat.id}`}
+                                            >
+                                              Printable copy
+                                            </a>
+                                          </div>
+                                          <div
+                                            className="mt-2"
+                                            style={{ width: "100%" }}
+                                          >
+                                            <Button
+                                              style={{ width: "100%" }}
+                                              href={
+                                                "/signOn?id=" + props.boat.id
+                                              }
+                                            >
+                                              Sign On to {boatDetails.boatName}
+                                            </Button>
+                                          </div>
+                                        </Col>
+                                      </Row>
+                                    </Container>
+                                  </Accordion.Body>
+                                </Accordion.Item>
+                              </Accordion>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col className="pt-2">
+                              <Accordion flush>
+                                <Accordion.Item eventKey="0">
+                                  <Accordion.Header>Handicaps</Accordion.Header>
+                                  <Accordion.Body>
+                                    <Handicaps
+                                      handicaps={props.boat.handicaps}
+                                    ></Handicaps>
+                                  </Accordion.Body>
+                                </Accordion.Item>
+                              </Accordion>
+                            </Col>
                           </Row>
                         </Container>
                       </Col>

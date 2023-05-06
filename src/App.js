@@ -3,8 +3,10 @@ import Boats from "./components/Boats";
 import SignOn from "./components/SignOn";
 import Home from "./components/Home";
 import Print from "./components/Print";
-import { Container, Row, Col, Navbar, Nav } from "react-bootstrap";
+import { Container, Row, Col, Navbar, Nav, Dropdown } from "react-bootstrap";
 import CookieConsent from "react-cookie-consent";
+import PersonIcon from "@mui/icons-material/Person";
+
 function App() {
   return (
     <Router>
@@ -26,6 +28,16 @@ function App() {
               </Nav.Item>
             </Nav>
           </Navbar.Collapse>
+          <Dropdown>
+            <Dropdown.Toggle id="dropdown-basic">
+              <PersonIcon></PersonIcon>
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="dropdown-menu-end">
+              <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+              <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+              <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
       </Navbar>
       <Container className="mt-6" style={{ marginTop: "100px" }}>

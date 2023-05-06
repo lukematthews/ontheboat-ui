@@ -67,7 +67,7 @@ const Boats = () => {
               onChange={(e) => setSearch(e.target.value)}
               type="text"
               className="mb-2"
-              placeholder="Name, Sail number, Contact"
+              placeholder="Name, Sail number, Design, Contact"
               autoFocus
             ></Form.Control>
             <div className="input-group-append">
@@ -96,6 +96,12 @@ const Boats = () => {
               {
                 field: "design",
                 headerName: "Design",
+                width: 150,
+                headerClassName: "bg-light",
+              },
+              {
+                field: "contact",
+                headerName: "Contact",
                 width: 150,
                 headerClassName: "bg-light",
               },
