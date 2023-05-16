@@ -35,7 +35,7 @@ function SignOn() {
   });
 
   const loadBoat = async () => {
-    const response = await fetch(`/api/boat-details?boatId=${boatIdValue}`);
+    const response = await fetch(`/api/marina/boat-details?boatId=${boatIdValue}`);
     const data = await response.json();
     setBoatDetails(data);
     setLoading("");
@@ -57,7 +57,7 @@ function SignOn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     crewRequest.boatId = boatIdValue;
-    let res = await fetch("/api/sign-on", {
+    let res = await fetch("/api/crew/sign-on", {
       method: "POST",
       body: JSON.stringify(crewRequest),
       headers: { "Content-Type": "application/json" },
@@ -65,7 +65,7 @@ function SignOn() {
   };
 
   const loadCrew = async (crewId) => {
-    let res = await fetch(`/api/find-by-id?uuid=${crewId}`, {
+    let res = await fetch(`/api/crew/find-by-id?uuid=${crewId}`, {
       headers: { "Content-Type": "application/json" },
     })
       .then((response) => response.json())

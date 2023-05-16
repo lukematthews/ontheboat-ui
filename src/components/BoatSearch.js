@@ -36,7 +36,7 @@ const BoatSearch = () => {
       return;
     }
     event.preventDefault();
-    fetch("/api/search?search=" + search)
+    fetch("/api/marina/search?search=" + search)
       .then((response) => response.json())
       .then((data) => setResults({ rows: data }));
   };

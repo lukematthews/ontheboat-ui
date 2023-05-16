@@ -10,7 +10,7 @@ const Print = (props) => {
   const [signOnUrl, setSignOnUrl] = useState("");
 
   const fetchData = async () => {
-    const response = await fetch(`/api/boat-details?boatId=${boatIdValue}`);
+    const response = await fetch(`/api/marina/boat-details?boatId=${boatIdValue}`);
     const data = await response.json();
     setBoat(data);
     setSignOnUrl(

@@ -19,7 +19,7 @@ const Boats = () => {
   const [selectedBoat, setSelectedBoat] = useState({});
   const fetchData = async () => {
     const response = await fetch(
-      `/api/search-page?search=${search}&page=${paginationModel.page}&size=${paginationModel.pageSize}`
+      `/api/marina/search-page?search=${search}&page=${paginationModel.page}&size=${paginationModel.pageSize}`
     );
     const data = await response.json();
     updatePage(data);
@@ -31,7 +31,7 @@ const Boats = () => {
 
   const doSearch = async () => {
     const response = await fetch(
-      `/api/search-page?search=${search}&page=${paginationModel.page}&size=${paginationModel.pageSize}`
+      `/api/marina/search-page?search=${search}&page=${paginationModel.page}&size=${paginationModel.pageSize}`
     );
     const data = await response.json();
     updatePage(data);

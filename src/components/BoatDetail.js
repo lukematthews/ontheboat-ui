@@ -2,7 +2,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import QRCode from "react-qr-code";
-import { Button, Card, Modal, Accordion, Table } from "react-bootstrap";
+import { Button, Card, Modal, Accordion } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { Paper } from "@mui/material";
 import { grey } from "@mui/material/colors";
@@ -38,11 +38,11 @@ const BoatDetail = (props) => {
   };
 
   const parseNewLines = (text) => {
-    return text.split("\n").map((line) => (
-      <>
-        <span>{line}</span>
+    return text.split("\n").map((line, index) => (
+      <span key={`bio-${boatDetails.id}-${index}`}>
+        {line}
         <br />
-      </>
+      </span>
     ));
   };
 
@@ -72,7 +72,7 @@ const BoatDetail = (props) => {
                           <Card.Img
                             variant="top"
                             onError={(e) => (e.target.src = "")}
-                            src={"/api/boat-photo?id=" + props.boat.id}
+                            src={"/api/marina/boat-photo?id=" + props.boat.id}
                           ></Card.Img>
                         </Paper>
                       </div>
@@ -97,7 +97,8 @@ const BoatDetail = (props) => {
                             {field("Rig", "rig")}
                             {field("Launch Year", "launchYear")}
                           </Row>
-                        </Container><Container>
+                        </Container>
+                        <Container>
                           <Row>
                             <Col>
                               <Accordion flush>

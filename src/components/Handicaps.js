@@ -15,7 +15,7 @@ const Handicaps = (props) => {
         <tbody>
           {props.handicaps.map((handicap) => {
             return (
-              <tr id={handicap.id}>
+              <tr key={`handicap-${handicap.id}`} id={handicap.id}>
                 <td>{handicap.type}</td>
                 <td>{handicap.rating}</td>
                 <td>{handicap.certificate}</td>
