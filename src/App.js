@@ -21,7 +21,7 @@ function App() {
               <Nav className="me-auto">
                 <Nav.Item href="/boats">
                   <Link role="button" to="/boats" className="nav-link active">
-                    Boat register
+                    Boat Register
                   </Link>
                 </Nav.Item>
                 <Nav.Item>
@@ -36,13 +36,10 @@ function App() {
         </Navbar>
         <div
           style={{
-            backgroundImage: 'url("/ontheboat.jpg")',
-            backgroundSize: "cover",
-            marginTop: "-100px",
           }}
         >
-          <Container className="mt-6" style={{ paddingTop: "200px" }}>
-            <Row>
+          <Container className="mt-6" style={{ paddingTop: "200px", backgroundImage: "url(/ontheboat.jpg)", backgroundSize: "cover"}}>
+            <Row className="py-2" style={{background: "rgba(255,255,255,0.7)"}}>
               <Col>
                 <div className="App">
                   <Routes>
