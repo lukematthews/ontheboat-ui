@@ -12,58 +12,68 @@ import UserMenu from "./components/UserMenu";
 function App() {
   return (
     <Router>
-      <Navbar fixed="top" bg="primary" variant="dark">
-        <div className="container-fluid">
-          <Navbar.Brand href="/">Boat Tools</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Item href="/boats">
-                <Link role="button" to="/boats" className="nav-link active">
-                  Boat register
-                </Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Link role="button" to="/signOn" className="nav-link">
-                  Sign On
-                </Link>
-              </Nav.Item>
-            </Nav>
-          </Navbar.Collapse>
-          <UserMenu></UserMenu>
+      <div>
+        <Navbar fixed="top" bg="primary" variant="dark">
+          <div className="container-fluid">
+            <Navbar.Brand href="/"></Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="me-auto">
+                <Nav.Item href="/boats">
+                  <Link role="button" to="/boats" className="nav-link active">
+                    Boat register
+                  </Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Link role="button" to="/signOn" className="nav-link">
+                    Sign On
+                  </Link>
+                </Nav.Item>
+              </Nav>
+            </Navbar.Collapse>
+            <UserMenu></UserMenu>
+          </div>
+        </Navbar>
+        <div
+          style={{
+            backgroundImage: 'url("/ontheboat.jpg")',
+            backgroundSize: "cover",
+            marginTop: "-100px",
+          }}
+        >
+          <Container className="mt-6" style={{ paddingTop: "200px" }}>
+            <Row>
+              <Col>
+                <div className="App">
+                  <Routes>
+                    <Route path="/boats" element={<Boats />}></Route>
+                    <Route path="/" element={<Home />}></Route>
+                    <Route path="/signOn" element={<SignOn />}></Route>
+                    <Route path="/print" element={<Print />}></Route>
+                    <Route path="/signUp" element={<SignUp />}></Route>
+                    <Route path="/login" element={<Login />}></Route>
+                  </Routes>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <CookieConsent
+                location="bottom"
+                buttonText="Accept"
+                enableDeclineButton="true"
+                flipButtons="true"
+                declineButtonText="No"
+                cookieName="cookiesEnabled"
+                style={{ background: "green" }}
+                buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
+                expires={150}
+              >
+                This website uses cookies to help signing on to a boat easier.
+              </CookieConsent>
+            </Row>
+          </Container>
         </div>
-      </Navbar>
-      <Container className="mt-6" style={{ marginTop: "100px" }}>
-        <Row>
-          <Col>
-            <div className="App">
-              <Routes>
-                <Route path="/boats" element={<Boats />}></Route>
-                <Route path="/" element={<Home />}></Route>
-                <Route path="/signOn" element={<SignOn />}></Route>
-                <Route path="/print" element={<Print />}></Route>
-                <Route path="/signUp" element={<SignUp />}></Route>
-                <Route path="/login" element={<Login/>}></Route>
-              </Routes>
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <CookieConsent
-            location="bottom"
-            buttonText="Accept"
-            enableDeclineButton="true"
-            flipButtons="true"
-            declineButtonText="No"
-            cookieName="cookiesEnabled"
-            style={{ background: "green" }}
-            buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
-            expires={150}
-          >
-            This website uses cookies to help signing on to a boat easier.
-          </CookieConsent>
-        </Row>
-      </Container>
+      </div>
     </Router>
   );
 }

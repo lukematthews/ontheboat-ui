@@ -3,10 +3,10 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 const Home = (props) => {
   return (
     <>
-      <Container>
+      <Container style={{background: "rgba(255,255,255,0.7)"}}>
         <Row>
           <Col>
-            <h1>Boat Tools</h1>
+            <h1>On The Boat</h1>
             <p>
               This tool allows you to register who is currently on your boat
               once you're on the water
