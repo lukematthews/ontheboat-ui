@@ -3,27 +3,16 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 const Home = (props) => {
   return (
     <>
-      <div
-        style={{
-          marginBottom: "50px",
-          marginTop: "-100px",
-          height: "200px",
-          marginRight: "-100px",
-          marginLeft: "-100px",
-          padding: "100px",
-          color: "white",
-        }}
-      >
-        <Col className="h1" style={{fontWeight: "bolder"}}>
-          <span>On The Boat</span>
-        </Col>
-      </div>
-      <Container style={{ background: "rgba(255,255,255,0.7)" }}>
-        <Row>
+      <Container>
+        <Row style={{backgroundColor: "white", marginLeft: "-24px", marginRight: "-24px"}}>
+          <Col className="h1" style={{ fontWeight: "bolder" }}>
+            <img src="/ontheboat-logo.png" alt="On the Boat"></img>
+          </Col>
+        </Row>
+        <Row style={{ background: "rgba(255,255,255,0.7)" }}>
           <Col>
             <p>
-              This tool allows you to register who is currently on your boat
-              once you're on the water
+              Going out on your boat? You're in the right place.
             </p>
             <p>
               Using a QR code that is unique for your boat, crew can scan the

@@ -13,9 +13,9 @@ function App() {
   return (
     <Router>
       <div>
-        <Navbar fixed="top" bg="primary" variant="dark">
+        <Navbar fixed="top" bg="secondary" variant="light">
           <div className="container-fluid">
-            <Navbar.Brand href="/"></Navbar.Brand>
+            <Navbar.Brand href="/"><img src="/ontheboat-logo.png" alt="On the Boat" style={{height: "40px"}}></img></Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="me-auto">
@@ -40,7 +40,7 @@ function App() {
             backgroundSize: "cover",
           }}
         >
-          <Container className="mt-6" style={{ paddingTop: "70px" }}>
+          <Container>
             <Row
               className="py-2"
               style={{ background: "rgba(255,255,255,0.7)" }}
