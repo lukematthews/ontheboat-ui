@@ -1,10 +1,6 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
 
 const Home = (props) => {
-
-            // backgroundImage: 'url("/ontheboat2.jpg")',
-            // backgroundSize: "cover",
-
   return (
     <>
       <div

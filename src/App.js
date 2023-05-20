@@ -36,10 +36,15 @@ function App() {
         </Navbar>
         <div
           style={{
+            backgroundImage: "url(/ontheboat2.jpg)",
+            backgroundSize: "cover",
           }}
         >
-          <Container className="mt-6" style={{ paddingTop: "200px", backgroundImage: "url(/ontheboat.jpg)", backgroundSize: "cover"}}>
-            <Row className="py-2" style={{background: "rgba(255,255,255,0.7)"}}>
+          <Container className="mt-6" style={{ paddingTop: "70px" }}>
+            <Row
+              className="py-2"
+              style={{ background: "rgba(255,255,255,0.7)" }}
+            >
               <Col>
                 <div className="App">
                   <Routes>
