@@ -1,11 +1,15 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import BoatDetail from "./BoatDetail";
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
-import BoatDetailModal from "./BoatDetail";
 import { Search } from "@mui/icons-material";
+import BoatDetailDialog from "./BoatDetailDialog";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedBoatRegister } from "../features/boatRegisterSlice";
 
 const Boats = () => {
+  const dispatch = useDispatch();
+  const selectedBoat = useSelector((state) => state.boatRegisterSelectedBoat);
+
   const [page, setPage] = useState({
     page: { page: 0, pageSize: 10 },
     pageSize: 10,
@@ -16,7 +20,6 @@ const Boats = () => {
     content: [],
   });
   const [search, setSearch] = useState("");
-  const [selectedBoat, setSelectedBoat] = useState({});
   const fetchData = async () => {
     const response = await fetch(
       `/api/marina/search-page?search=${search}&page=${paginationModel.page}&size=${paginationModel.pageSize}`
@@ -53,7 +56,7 @@ const Boats = () => {
   }, [paginationModel]);
 
   const selectionChanged = (boat) => {
-    setSelectedBoat({ ...page.content.find((row) => row.id == boat) });
+    dispatch(setSelectedBoatRegister({ ...page.content.find((row) => row.id == boat) }));
   };
 
   return (
@@ -115,7 +118,7 @@ const Boats = () => {
             onRowSelectionModelChange={(data) => selectionChanged(data)}
           />
         </div>
-        <BoatDetail boat={selectedBoat}></BoatDetail>
+        <BoatDetailDialog boat={selectedBoat.value}></BoatDetailDialog>
       </Col>
     </Row>
   );

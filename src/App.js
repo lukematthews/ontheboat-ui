@@ -8,6 +8,9 @@ import CookieConsent from "react-cookie-consent";
 import SignUp from "./components/SignUp";
 import Login from "./components/Login";
 import UserMenu from "./components/UserMenu";
+import CrewHome from "./components/CrewHome";
+import Onboard from "./components/Onboard";
+import BoatDetailPage from "./components/BoatDetailPage";
 
 function App() {
   return (
@@ -15,7 +18,13 @@ function App() {
       <div>
         <Navbar fixed="top" bg="secondary" variant="light">
           <div className="container-fluid">
-            <Navbar.Brand href="/"><img src="/ontheboat-logo.png" alt="On the Boat" style={{height: "40px"}}></img></Navbar.Brand>
+            <Navbar.Brand href="/">
+              <img
+                src="/ontheboat-logo.png"
+                alt="On the Boat"
+                style={{ height: "40px" }}
+              ></img>
+            </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="me-auto">
@@ -38,12 +47,13 @@ function App() {
           style={{
             backgroundImage: "url(/ontheboat2.jpg)",
             backgroundSize: "cover",
+            paddingTop: "10px"
           }}
         >
           <Container>
             <Row
               className="py-2"
-              style={{ background: "rgba(255,255,255,0.7)" }}
+              style={{ background: "rgba(255,255,255,0.95)" }}
             >
               <Col>
                 <div className="App">
@@ -54,6 +64,9 @@ function App() {
                     <Route path="/print" element={<Print />}></Route>
                     <Route path="/signUp" element={<SignUp />}></Route>
                     <Route path="/login" element={<Login />}></Route>
+                    <Route path="/crew" element={<CrewHome />}></Route>
+                    <Route path="/onboard" element={<Onboard />}></Route>
+                    <Route path="/boat-detail" element={<BoatDetailPage/>}></Route>
                   </Routes>
                 </div>
               </Col>

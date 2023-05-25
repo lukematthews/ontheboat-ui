@@ -3,14 +3,13 @@ import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import BoatSearch from "./BoatSearch";
 import { useSelector } from "react-redux";
-import { useCookies } from "react-cookie";
+import Cookies from "js-cookie";
 
 function SignOn() {
   let [boatId] = useSearchParams();
   let boatIdValue;
   const [loading, setLoading] = useState("Loading");
-  const [boat, setBoatDetails] = useState({});
-  const [cookies, setCookie] = useCookies(["boatweb"]);
+  const [boat, setBoatDetails] = useState({name: '', sailNumber: '', id: ''});
   const selectedBoat = useSelector((state) => state.selectedBoat);
 
   // has a boat id been passed in via the props? use that.
@@ -21,18 +20,35 @@ function SignOn() {
     boatIdValue = boatId.get("id");
   } else if (selectedBoat.value.id) {
     boatIdValue = selectedBoat.value.id;
-  } else if (cookies.lastBoatOnboard) {
-    boatIdValue = cookies.lastBoatOnboard;
+  } else if (Cookies.get("lastBoatOnboard")) {
+    boatIdValue = Cookies.get("lastBoatOnboard");
   }
 
-  const [crewRequest, setCrewRequest] = useState({
-    boatId: boatIdValue,
-    firstName: "",
-    lastName: "",
-    mobile: "",
-    email: "",
-    rememberMe: true,
-  });
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [email, setEmail] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+
+  const toJson = () => {
+    return JSON.stringify({
+      "firstName": firstName,
+      "lastName": lastName,
+      "mobile": mobile,
+      "email": email,
+      "rememberMe": rememberMe,
+      "boatId": boatIdValue,
+      "uuid": "none",
+    });
+  };
+
+  const loadCrewData = (data) => {
+    setFirstName(data.firstName);
+    setLastName(data.lastName);
+    setMobile(data.mobile);
+    setEmail(data.email);
+    setRememberMe(data.rememberMe);
+  };
 
   const loadBoat = async () => {
     const response = await fetch(`/api/marina/boat-details?boatId=${boatIdValue}`);
@@ -42,12 +58,12 @@ function SignOn() {
   };
 
   useEffect(() => {
-    if (cookies.lastBoatOnboard) {
-      boatIdValue = cookies.lastBoatOnboard;
+    if (Cookies.get("lastBoatOnboard")) {
+      boatIdValue = Cookies.get("lastBoatOnboard");
     }
 
-    if (cookies.crewUUID) {
-      loadCrew(cookies.crewUUID);
+    if (Cookies.get("crewUUID")) {
+      loadCrew(Cookies.get("crewUUID"));
     }
     if (boatIdValue && loading !== "") {
       loadBoat();
@@ -56,10 +72,9 @@ function SignOn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    crewRequest.boatId = boatIdValue;
     let res = await fetch("/api/crew/sign-on", {
       method: "POST",
-      body: JSON.stringify(crewRequest),
+      body: toJson(),
       headers: { "Content-Type": "application/json" },
     });
   };
@@ -69,7 +84,7 @@ function SignOn() {
       headers: { "Content-Type": "application/json" },
     })
       .then((response) => response.json())
-      .then((data) => setCrewRequest(data));
+      .then((data) => loadCrewData(data));
   };
 
   const displayBoat = () => {
@@ -109,7 +124,7 @@ function SignOn() {
             <Form.Control
               type="text"
               style={{ display: "none" }}
-              value={boatIdValue}
+              value={boat.id}
               readOnly
             ></Form.Control>
             <Form.Group controlId="firstName">
@@ -118,10 +133,11 @@ function SignOn() {
                 type="text"
                 placeholder="First Name"
                 autoComplete="first-name"
-                value={crewRequest.firstName}
+                value={firstName}
                 onChange={(e) => {
-                  crewRequest.firstName = e.target.value;
-                  setCrewRequest(crewRequest);
+                  // crewRequest.firstName = e.target.value;
+                  // setCrewRequest(crewRequest);
+                  setFirstName(e.target.value);
                 }}
               />
             </Form.Group>
@@ -131,10 +147,9 @@ function SignOn() {
                 type="text"
                 placeholder="Last Name"
                 autoComplete="family-name"
-                value={crewRequest.lastName}
+                value={lastName}
                 onChange={(e) => {
-                  crewRequest.lastName = e.target.value;
-                  setCrewRequest(crewRequest);
+                  setLastName(e.target.value);
                 }}
               />
             </Form.Group>
@@ -144,10 +159,9 @@ function SignOn() {
                 type="text"
                 placeholder="Mobile"
                 autoComplete="tel"
-                value={crewRequest.mobile}
+                value={mobile}
                 onChange={(e) => {
-                  crewRequest.mobile = e.target.value;
-                  setCrewRequest(crewRequest);
+                  setMobile(e.target.value);
                 }}
               />
             </Form.Group>
@@ -157,10 +171,9 @@ function SignOn() {
                 type="text"
                 placeholder="Email"
                 autoComplete="email"
-                value={crewRequest.email}
+                value={email}
                 onChange={(e) => {
-                  crewRequest.email = e.target.value;
-                  setCrewRequest(crewRequest);
+                  setEmail(e.target.value);
                 }}
               />
             </Form.Group>
@@ -170,8 +183,6 @@ function SignOn() {
                 type="select"
                 label="How long?"
                 onChange={(e) => {
-                  crewRequest.rememberMe = e.target.checked;
-                  setCrewRequest(crewRequest);
                 }}
               >
                 <option>Today</option>
@@ -182,10 +193,9 @@ function SignOn() {
               <Form.Check
                 type="checkbox"
                 label="Remember me"
-                value={crewRequest.rememberMe}
+                value={rememberMe}
                 onChange={(e) => {
-                  crewRequest.rememberMe = e.target.checked;
-                  setCrewRequest(crewRequest);
+                  setRememberMe(e.target.checked);
                 }}
               />
             </Form.Group>

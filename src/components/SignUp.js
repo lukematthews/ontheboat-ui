@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import { Form, Field } from "react-final-form";
-
+import { useDispatch } from "react-redux";
 const SignUp = (props) => {
+  
+  const dispatch = useDispatch();
   const [response, setResponse] = useState([]);
   const [show, setShow] = useState(false);
 
@@ -16,7 +18,7 @@ const SignUp = (props) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(e),
     };
-    fetch("/api/auth/sign-up", requestOptions)
+    fetch("/api/auth/register", requestOptions)
       .then((response) => response.json())
       .then((data) => handleResponse(data));
   };
@@ -28,6 +30,7 @@ const SignUp = (props) => {
 
   const renderResponse = () => {
     if (response.message === "User registered successfully!") {
+      dispatch({type: "user", payload: response.crew})
       return (
         <>
           <Modal show={show} onHide={handleClose}>

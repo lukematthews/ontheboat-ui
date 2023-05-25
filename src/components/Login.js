@@ -2,30 +2,39 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import { Form, Field } from "react-final-form";
 import { useDispatch } from "react-redux";
 import { setUser } from "../features/userSlice";
+import { useNavigate } from "react-router-dom";
+import base64 from "base-64";
+import Cookies from "js-cookie";
 
 const Login = (props) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
+    let auth =  'Basic ' + base64.encode(e.username + ":" + e.password);
     const requestOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(e),
+      headers: { "Authorization": auth},
     };
 
-    await fetch("/api/auth/signin", requestOptions)
-      .then((response) => response.json())
-      .then((data) => handleLoginResponse(data));
+    await fetch("/api/auth/token", requestOptions)
+      .then((response) => response.text())
+      .then(data => handleLoginResponse(data));
   };
 
   const handleLoginResponse = async (data) => {
+    // setCookie("token", data, {path: "/"});
+    Cookies.set("otb", data, )
+
     // get the profile for the user.
-    // const requestOptions = {
-    //   method: "GET",
-    //   headers: { "Content-Type": "application/json" },
-    // };
-    // await fetch("/api/crew/profile", requestOptions).then(response => response.json()).then(data => console.log(data));
-    dispatch(setUser(data));
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      headers: { "Authorization": "Bearer "+data}
+    };
+    let profile = await fetch("/api/crew/profile", requestOptions).then(response => response.json());
+    dispatch(setUser(profile));
+    navigate("/crew");
   }
 
   const formField = (props) => {

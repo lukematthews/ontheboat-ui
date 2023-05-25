@@ -13,7 +13,7 @@ const Handicaps = (props) => {
           </tr>
         </thead>
         <tbody>
-          {props.handicaps.map((handicap) => {
+          {props.handicaps && props.handicaps.map((handicap) => {
             return (
               <tr key={`handicap-${handicap.id}`} id={handicap.id}>
                 <td>{handicap.type}</td>
