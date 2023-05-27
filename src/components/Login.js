@@ -29,8 +29,7 @@ const Login = (props) => {
     // get the profile for the user.
     const requestOptions = {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
-      headers: { "Authorization": "Bearer "+data}
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer "+data}
     };
     let profile = await fetch("/api/crew/profile", requestOptions).then(response => response.json());
     dispatch(setUser(profile));

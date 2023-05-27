@@ -15,6 +15,7 @@ const BoatDetailDialog = (props) => {
   const [show, setShow] = useState(true);
   const handleClose = () => setShow(false);
   const navigate = useNavigate();
+  let loggedIn = profile.value.id ? true : false;
 
   let boatDetails = props.boat && props.boat.boatDetails;
   // if (boatDetails) {
@@ -44,7 +45,7 @@ const BoatDetailDialog = (props) => {
                   <BoatDetail boat={props.boat} ></BoatDetail>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button onClick={() => {navigate("/boat-detail")}}>Edit</Button>
+                  <Button disabled={!loggedIn} onClick={() => {navigate("/boat-detail")}}>Edit</Button>
                 </Modal.Footer>
               </Modal>
             </Col>

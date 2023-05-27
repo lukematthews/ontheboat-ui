@@ -2,16 +2,18 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import QRCode from "react-qr-code";
-import { Button, Card, Modal, Accordion } from "react-bootstrap";
+import { Button, Card, Modal, Accordion, Form } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { Paper } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import Handicaps from "./Handicaps";
 import { useSelector } from "react-redux";
+import Cookies from "js-cookie";
 
 const BoatDetail = (props) => {
   const profile = useSelector((state) => state.user);
   const [show, setShow] = useState(false);
+  const [requestType, setRequestType] = useState("");
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -24,7 +26,7 @@ const BoatDetail = (props) => {
     // setShow(true);
   }, [props.boat]);
 
-  const requestOwnerChangeButton = () => {
+  const RequestOwnerChangeButton = () => {
     if (profile.value.id) {
       return (
         <Button onClick={() => changeOwner()}>Request Ownership Change</Button>
@@ -38,66 +40,128 @@ const BoatDetail = (props) => {
     setShow(true);
   };
 
-  const requestChange = () => {
+  const postOwnershipChange = async (e) => {
+    e.preventDefault();
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + Cookies.get("otb"),
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        boatId: boatDetails.id,
+        crewId: profile.value.id,
+        requestType: requestType,
+      }),
+    };
+
+    await fetch("/api/crew/request-ownership-change", requestOptions)
+      .then((response) => response.text())
+      .then((data) => () => {
+        setShow(false);
+      });
+    setShow(false);
+  };
+
+  const RequestChange = () => {
     return (
       <>
-        {requestOwnerChangeButton()}
+        <RequestOwnerChangeButton></RequestOwnerChangeButton>
         <Modal show={show} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Request ownership change</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Container>
-              <Row>
-                <Col>
-                  <p>
-                    You're requesting to be added to the list of owners for{" "}
-                    {boatDetails.boatName}
-                  </p>
-                  <p>
-                    The current owners will contacted for approval and you will
-                    be sent an email once completed.
-                  </p>
-                </Col>
-              </Row>
-            </Container>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button>Ok</Button>
-            <Button>Cancel</Button>
-          </Modal.Footer>
+          <Form onSubmit={(e) => postOwnershipChange(e)} method="POST">
+            <Modal.Header closeButton>
+              <Modal.Title>Request ownership change</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Container>
+                <Row>
+                  <Col>
+                    <p>
+                      You're requesting to be added to the list of owners for{" "}
+                      {boatDetails.boatName}
+                    </p>
+                    <p>
+                      Would you like to
+                      <Form.Check
+                        id="ownership-choice-1"
+                        type="radio"
+                        label="Take sole ownership of the boat"
+                        value="sole"
+                        name="ownershipType"
+                        onChange={(e) => setRequestType(e.target.value)}
+                        defaultChecked
+                      />
+                      <Form.Check
+                        id="ownership-choice-2"
+                        type="radio"
+                        value="partner"
+                        label="Be added as an owner of the boat"
+                        onChange={(e) => setRequestType(e.target.value)}
+                        name="ownershipType"
+                      />
+                      <Form.Check
+                        id="ownership-choice-3"
+                        type="radio"
+                        value="other"
+                        label="Allocate someone else"
+                        onChange={(e) => setRequestType(e.target.value)}
+                        name="ownershipType"
+                      />
+                      {/* We need to allow the user to specify who. They must be a crew member of the site. */}
+                      <Form.Text id="boatId" style={{ display: "none" }}>
+                        {boatDetails.id}
+                      </Form.Text>
+                    </p>
+                    <p>
+                      The current owners will contacted for approval and you
+                      will be sent an email once completed.
+                    </p>
+                  </Col>
+                </Row>
+              </Container>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button type="submit">Ok</Button>
+              <Button onClick={() => handleClose()}>Cancel</Button>
+            </Modal.Footer>
+          </Form>
         </Modal>
       </>
     );
   };
 
-  const field = (name, field) => {
+  const Field = ({ name, field }) => {
     // field
     let fieldClass = field ? "px-1 mb-1 border rounded-1" : "";
 
     return (
       <>
         <div className="col-xs-12 col-lg-3">
-          <span className="fw-bold ">{name}</span>
+          <Form.Label column className="fw-bold">
+            {name}
+          </Form.Label>
         </div>
         <div className="col-xs-12 col-lg-3">
-          <p className={fieldClass + " "}>
-            <span>{boatDetails[field] || "-"}</span>
-          </p>
+          <Form.Control
+            type="text"
+            value={boatDetails[field] || "-"}
+            disabled
+            style={{ backgroundColor: "unset", opacity: "unset" }}
+          ></Form.Control>
         </div>
       </>
     );
   };
 
-  const parseNewLines = (text) => {
-    if (!text) {
+  const ParsedText = ({ children }) => {
+    if (!children) {
       return (
         <span key={`bio-${boatDetails.id}-0`}>
           <br />
         </span>
       );
     }
-    return text.split("\n").map((line, index) => (
+    return children.split("\n").map((line, index) => (
       <span key={`bio-${boatDetails.id}-${index}`}>
         {line}
         <br />
@@ -130,26 +194,26 @@ const BoatDetail = (props) => {
                 <Row>
                   <Col>
                     <p>
-                      <span>{parseNewLines(boatDetails.bio)}</span>
+                      <ParsedText>{boatDetails.bio}</ParsedText>
                     </p>
                   </Col>
                 </Row>
                 <Row>
-                  {field("Design", "design")}
-                  {field("Colour", "hullColour")}
+                  <Field name="Design" field="desigin"></Field>
+                  <Field name="Colour" field="hullColour"></Field>
                 </Row>
                 <Row className="mt-0">
-                  {field("Hull Material", "hullMaterial")}
-                  {field("Length", "lengthOverall")}
+                  <Field name="Hull Material" field="hullMaterial"></Field>
+                  <Field name="Length" field="lengthOverall"></Field>
                 </Row>
                 <Row className="mt-0">
-                  {field("Rig", "rig")}
-                  {field("Launch Year", "launchYear")}
+                  <Field name="Rig" field="rig"></Field>
+                  <Field name="Launch Year" field="launchYear"></Field>
                 </Row>
                 <Row className="mt-0">
-                  {field("Contact", "contact")}
+                  <Field name="Contact" field="contact"></Field>
                   <div className="col-xs-12 col-lg-6">
-                    {props.editable && requestChange()}
+                    {props.editable && <RequestChange></RequestChange>}
                   </div>
                 </Row>
               </Container>
