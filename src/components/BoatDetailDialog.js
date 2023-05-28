@@ -1,10 +1,7 @@
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import {
-  Button,
-  Modal,
-} from "react-bootstrap";
+import { Button, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import BoatDetail from "./BoatDetail";
@@ -14,17 +11,17 @@ const BoatDetailDialog = (props) => {
   const profile = useSelector((state) => state.user);
   const [show, setShow] = useState(true);
   const handleClose = () => setShow(false);
-  const navigate = useNavigate();
   let loggedIn = profile.value.id ? true : false;
 
   let boatDetails = props.boat && props.boat.boatDetails;
   // if (boatDetails) {
-    // boatDetails.contact = props.boat.contact;
+  // boatDetails.contact = props.boat.contact;
   // }
 
   useEffect(() => {
     setShow(true);
   }, [props.boat]);
+
 
   return (
     <>
@@ -42,10 +39,10 @@ const BoatDetailDialog = (props) => {
                   </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <BoatDetail boat={props.boat} ></BoatDetail>
+                  <BoatDetail boat={props.boat}></BoatDetail>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button disabled={!loggedIn} onClick={() => {navigate("/boat-detail")}}>Edit</Button>
+                  <EditButton loggedIn={loggedIn}></EditButton>
                 </Modal.Footer>
               </Modal>
             </Col>
@@ -53,6 +50,31 @@ const BoatDetailDialog = (props) => {
         </Container>
       )}
     </>
+  );
+};
+
+const EditButton = (props) => {
+  const navigate = useNavigate();
+  let message = props.loggedIn
+    ? "Edit the details of this boat"
+    : "Login to be able to edit boat details of boats you own";
+  let style = props.loggedIn ? {} : { pointerEvents: "none" };
+  return (
+    <OverlayTrigger
+      overlay={<Tooltip id="tooltip-disabled">{message}</Tooltip>}
+    >
+      <span className="d-inline-block">
+        <Button
+          disabled={!props.loggedIn}
+          style={style}
+          onClick={() => {
+            navigate("/boat-detail");
+          }}
+        >
+          Edit
+        </Button>
+      </span>
+    </OverlayTrigger>
   );
 };
 

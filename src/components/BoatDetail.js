@@ -2,173 +2,27 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import QRCode from "react-qr-code";
-import { Button, Card, Modal, Accordion, Form } from "react-bootstrap";
-import { useState, useEffect } from "react";
+import {
+  Button,
+  Card,
+  Accordion,
+  Form,
+} from "react-bootstrap";
+import { useState } from "react";
 import { Paper } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import Handicaps from "./Handicaps";
 import { useSelector } from "react-redux";
-import Cookies from "js-cookie";
+import { RequestOwnershipChange } from "./RequestOwnershipChange";
 
 const BoatDetail = (props) => {
   const profile = useSelector((state) => state.user);
   const [show, setShow] = useState(false);
-  const [requestType, setRequestType] = useState("");
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   let boatDetails = { ...(props.boat && props.boat.boatDetails) };
   if (boatDetails) {
     boatDetails.contact = props.boat.contact;
   }
-
-  useEffect(() => {
-    // setShow(true);
-  }, [props.boat]);
-
-  const RequestOwnerChangeButton = () => {
-    if (profile.value.id) {
-      return (
-        <Button onClick={() => changeOwner()}>Request Ownership Change</Button>
-      );
-    } else {
-      return <Button disabled>Request Ownership Change</Button>;
-    }
-  };
-
-  const changeOwner = () => {
-    setShow(true);
-  };
-
-  const postOwnershipChange = async (e) => {
-    e.preventDefault();
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + Cookies.get("otb"),
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        boatId: boatDetails.id,
-        crewId: profile.value.id,
-        requestType: requestType,
-      }),
-    };
-
-    await fetch("/api/crew/request-ownership-change", requestOptions)
-      .then((response) => response.text())
-      .then((data) => () => {
-        setShow(false);
-      });
-    setShow(false);
-  };
-
-  const RequestChange = () => {
-    return (
-      <>
-        <RequestOwnerChangeButton></RequestOwnerChangeButton>
-        <Modal show={show} onHide={handleClose}>
-          <Form onSubmit={(e) => postOwnershipChange(e)} method="POST">
-            <Modal.Header closeButton>
-              <Modal.Title>Request ownership change</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Container>
-                <Row>
-                  <Col>
-                    <p>
-                      You're requesting to be added to the list of owners for{" "}
-                      {boatDetails.boatName}
-                    </p>
-                    <p>
-                      Would you like to
-                      <Form.Check
-                        id="ownership-choice-1"
-                        type="radio"
-                        label="Take sole ownership of the boat"
-                        value="sole"
-                        name="ownershipType"
-                        onChange={(e) => setRequestType(e.target.value)}
-                        defaultChecked
-                      />
-                      <Form.Check
-                        id="ownership-choice-2"
-                        type="radio"
-                        value="partner"
-                        label="Be added as an owner of the boat"
-                        onChange={(e) => setRequestType(e.target.value)}
-                        name="ownershipType"
-                      />
-                      <Form.Check
-                        id="ownership-choice-3"
-                        type="radio"
-                        value="other"
-                        label="Allocate someone else"
-                        onChange={(e) => setRequestType(e.target.value)}
-                        name="ownershipType"
-                      />
-                      {/* We need to allow the user to specify who. They must be a crew member of the site. */}
-                      <Form.Text id="boatId" style={{ display: "none" }}>
-                        {boatDetails.id}
-                      </Form.Text>
-                    </p>
-                    <p>
-                      The current owners will contacted for approval and you
-                      will be sent an email once completed.
-                    </p>
-                  </Col>
-                </Row>
-              </Container>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button type="submit">Ok</Button>
-              <Button onClick={() => handleClose()}>Cancel</Button>
-            </Modal.Footer>
-          </Form>
-        </Modal>
-      </>
-    );
-  };
-
-  const Field = ({ name, field }) => {
-    // field
-    let fieldClass = field ? "px-1 mb-1 border rounded-1" : "";
-
-    return (
-      <>
-        <div className="col-xs-12 col-lg-3">
-          <Form.Label column className="fw-bold">
-            {name}
-          </Form.Label>
-        </div>
-        <div className="col-xs-12 col-lg-3">
-          <Form.Control
-            type="text"
-            value={boatDetails[field] || "-"}
-            disabled
-            style={{ backgroundColor: "unset", opacity: "unset" }}
-          ></Form.Control>
-        </div>
-      </>
-    );
-  };
-
-  const ParsedText = ({ children }) => {
-    if (!children) {
-      return (
-        <span key={`bio-${boatDetails.id}-0`}>
-          <br />
-        </span>
-      );
-    }
-    return children.split("\n").map((line, index) => (
-      <span key={`bio-${boatDetails.id}-${index}`}>
-        {line}
-        <br />
-      </span>
-    ));
-  };
-
   return (
     <>
       {boatDetails && (
@@ -193,27 +47,63 @@ const BoatDetail = (props) => {
               <Container>
                 <Row>
                   <Col>
-                    <p>
-                      <ParsedText>{boatDetails.bio}</ParsedText>
-                    </p>
+                    <Bio
+                      loggedIn={profile.value.id ? true : false}
+                      details={boatDetails}
+                    />
                   </Col>
                 </Row>
                 <Row>
-                  <Field name="Design" field="desigin"></Field>
-                  <Field name="Colour" field="hullColour"></Field>
+                  <Field
+                    name="Design"
+                    field="design"
+                    boatDetails={boatDetails}
+                    loggedIn={profile.value.id ? true : false}
+                  ></Field>
+                  <Field
+                    name="Colour"
+                    field="hullColour"
+                    boatDetails={boatDetails}
+                    loggedIn={profile.value.id ? true : false}
+                  ></Field>
                 </Row>
                 <Row className="mt-0">
-                  <Field name="Hull Material" field="hullMaterial"></Field>
-                  <Field name="Length" field="lengthOverall"></Field>
+                  <Field
+                    name="Hull Material"
+                    field="hullMaterial"
+                    boatDetails={boatDetails}
+                    loggedIn={profile.value.id ? true : false}
+                  ></Field>
+                  <Field
+                    name="Length"
+                    field="lengthOverall"
+                    boatDetails={boatDetails}
+                    loggedIn={profile.value.id ? true : false}
+                  ></Field>
                 </Row>
                 <Row className="mt-0">
-                  <Field name="Rig" field="rig"></Field>
-                  <Field name="Launch Year" field="launchYear"></Field>
+                  <Field
+                    name="Rig"
+                    field="rig"
+                    boatDetails={boatDetails}
+                    loggedIn={profile.value.id ? true : false}
+                  ></Field>
+                  <Field
+                    name="Launch Year"
+                    field="launchYear"
+                    boatDetails={boatDetails}
+                    loggedIn={profile.value.id ? true : false}
+                  ></Field>
                 </Row>
                 <Row className="mt-0">
-                  <Field name="Contact" field="contact"></Field>
+                  <Field
+                    name="Contact"
+                    field="contact"
+                    boatDetails={boatDetails}
+                    loggedIn={profile.value.id ? true : false}
+                  ></Field>
                   <div className="col-xs-12 col-lg-6">
-                    {props.editable && <RequestChange></RequestChange>}
+                    {props.editable && <RequestOwnershipChange boatDetails={boatDetails}></RequestOwnershipChange>}
                   </div>
                 </Row>
               </Container>
@@ -281,6 +171,73 @@ const BoatDetail = (props) => {
         </Container>
       )}
     </>
+  );
+};
+
+const Field = ({ loggedIn, boatDetails, name, field }) => {
+  // field
+  // let fieldClass = field ? "px-1 mb-1 border rounded-1" : "";
+  let fieldClass = loggedIn ? "" : "form-control-plaintext";
+
+  return (
+    <>
+      <div className="col-xs-12 col-lg-3">
+        <Form.Label column className="fw-bold">
+          {name}
+        </Form.Label>
+      </div>
+      <div className="col-xs-12 col-lg-3">
+        <Form.Control
+          type="text"
+          disabled={!loggedIn}
+          defaultValue={boatDetails[field]}
+          onChange={(e) => {
+            boatDetails[field] = e.target.value;
+          }}
+          style={{ backgroundColor: "unset", opacity: "unset" }}
+          className={fieldClass}
+        ></Form.Control>
+      </div>
+    </>
+  );
+};
+
+const ParsedText = ({ boatId, children }) => {
+  if (!children) {
+    return (
+      <span key={`bio-${boatId}-0`}>
+        <br />
+      </span>
+    );
+  }
+  return children.split("\n").map((line, index) => (
+    <span key={`bio-${boatId}-${index}`}>
+      {line}
+      <br />
+    </span>
+  ));
+};
+
+const Bio = (props) => {
+  if (props.loggedIn) {
+    return (
+      <>
+        <Form.Label className="fw-bold form-label col-form-label">
+          Bio
+        </Form.Label>
+        <textarea
+          className="form-control"
+          type="text"
+          defaultValue={props.details.bio}
+          rows={5}
+        />
+      </>
+    );
+  }
+  return (
+    <p>
+      <ParsedText boatId={props.details.id}>{props.details.bio}</ParsedText>
+    </p>
   );
 };
 
