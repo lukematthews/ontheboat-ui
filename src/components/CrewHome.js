@@ -4,24 +4,12 @@ import Col from "react-bootstrap/Col";
 import QRCode from "react-qr-code";
 import { Button, Card, Modal, Accordion } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import OwnedBoats from "./OwnedBoats";
 
 const CrewHome = (props) => {
   const profile = useSelector((state) => state.user);
 
-  const listBoats = () => {
-    let view = <></>;
-    if (profile.value.ownedBoats) {
-        view = profile.value.ownedBoats.map(boat => {
-            return <>
-            <div>
-
-            </div>
-            </>
-        });
-    }
-    return view;
-  };
-  if (!profile.value.id) {
+  if (!profile.isLoggedIn) {
     return <></>;
   }
   return (
@@ -34,9 +22,16 @@ const CrewHome = (props) => {
         </Row>
         <Row>
           <Col>
-            <div className="h2">Boats</div>
-            {listBoats()}
+            <div className="h2">My Boats</div>
+            <OwnedBoats></OwnedBoats>
           </Col>
+          <Col>
+            <div className="h2">Stats</div>
+            <div className="h3">Number of times:</div>
+            <div className="h3">Total amount of time:</div>
+            <div className="h3">Results</div>
+          </Col>
+
         </Row>
       </Container>
     </>

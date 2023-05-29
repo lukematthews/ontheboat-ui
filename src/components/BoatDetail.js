@@ -2,12 +2,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import QRCode from "react-qr-code";
-import {
-  Button,
-  Card,
-  Accordion,
-  Form,
-} from "react-bootstrap";
+import { Button, Card, Accordion, Form } from "react-bootstrap";
 import { useState } from "react";
 import { Paper } from "@mui/material";
 import { grey } from "@mui/material/colors";
@@ -48,7 +43,7 @@ const BoatDetail = (props) => {
                 <Row>
                   <Col>
                     <Bio
-                      loggedIn={profile.value.id ? true : false}
+                      loggedIn={profile.loggedIn ? true : false}
                       details={boatDetails}
                     />
                   </Col>
@@ -58,13 +53,13 @@ const BoatDetail = (props) => {
                     name="Design"
                     field="design"
                     boatDetails={boatDetails}
-                    loggedIn={profile.value.id ? true : false}
+                    loggedIn={profile.loggedn ? true : false}
                   ></Field>
                   <Field
                     name="Colour"
                     field="hullColour"
                     boatDetails={boatDetails}
-                    loggedIn={profile.value.id ? true : false}
+                    loggedIn={profile.loggedn ? true : false}
                   ></Field>
                 </Row>
                 <Row className="mt-0">
@@ -72,13 +67,13 @@ const BoatDetail = (props) => {
                     name="Hull Material"
                     field="hullMaterial"
                     boatDetails={boatDetails}
-                    loggedIn={profile.value.id ? true : false}
+                    loggedIn={profile.loggedn ? true : false}
                   ></Field>
                   <Field
                     name="Length"
                     field="lengthOverall"
                     boatDetails={boatDetails}
-                    loggedIn={profile.value.id ? true : false}
+                    loggedIn={profile.loggedn ? true : false}
                   ></Field>
                 </Row>
                 <Row className="mt-0">
@@ -86,13 +81,13 @@ const BoatDetail = (props) => {
                     name="Rig"
                     field="rig"
                     boatDetails={boatDetails}
-                    loggedIn={profile.value.id ? true : false}
+                    loggedIn={profile.loggedn ? true : false}
                   ></Field>
                   <Field
                     name="Launch Year"
                     field="launchYear"
                     boatDetails={boatDetails}
-                    loggedIn={profile.value.id ? true : false}
+                    loggedIn={profile.loggedn ? true : false}
                   ></Field>
                 </Row>
                 <Row className="mt-0">
@@ -100,10 +95,14 @@ const BoatDetail = (props) => {
                     name="Contact"
                     field="contact"
                     boatDetails={boatDetails}
-                    loggedIn={profile.value.id ? true : false}
+                    loggedIn={profile.loggedn ? true : false}
                   ></Field>
                   <div className="col-xs-12 col-lg-6">
-                    {props.editable && <RequestOwnershipChange boatDetails={boatDetails}></RequestOwnershipChange>}
+                    {props.editable && (
+                      <RequestOwnershipChange
+                        boatDetails={boatDetails}
+                      ></RequestOwnershipChange>
+                    )}
                   </div>
                 </Row>
               </Container>
@@ -219,25 +218,21 @@ const ParsedText = ({ boatId, children }) => {
 };
 
 const Bio = (props) => {
-  if (props.loggedIn) {
-    return (
-      <>
-        <Form.Label className="fw-bold form-label col-form-label">
-          Bio
-        </Form.Label>
-        <textarea
-          className="form-control"
-          type="text"
-          defaultValue={props.details.bio}
-          rows={5}
-        />
-      </>
-    );
+  let fieldClass = "form-control ";
+  if (!props.loggedIn) {
+    fieldClass = fieldClass + "form-control-plaintext";
   }
   return (
-    <p>
-      <ParsedText boatId={props.details.id}>{props.details.bio}</ParsedText>
-    </p>
+    
+    <>
+      <Form.Label className="fw-bold form-label col-form-label">Bio</Form.Label>
+      <textarea
+        className={fieldClass}
+        type="text"
+        defaultValue={props.details.bio}
+        rows={5}
+      />
+    </>
   );
 };
 

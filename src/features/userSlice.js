@@ -4,10 +4,12 @@ export const userSlice = createSlice({
   name: "user",
   initialState: {
     value: {},
+    isLoggedIn: false
   },
   reducers: {
     setUser: (state, action) => {
-      state.value = action.payload;
+      state.value = action.payload.user;
+      state.isLoggedIn = action.payload.isLoggedIn;
     },
   },
 });

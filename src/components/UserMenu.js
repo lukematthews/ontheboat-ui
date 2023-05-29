@@ -9,15 +9,14 @@ const UserMenu = () => {
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.user);
 
-
   useEffect(() => {
     loadProfile();
   }, [Cookies.get("otb")]);
 
 
   const loadProfile = async () => {
-    console.log("loading profile: "+JSON.stringify(Cookies.get()));
-    if (!profile.value && !profile.value.username && Cookies.get("otb")) {
+    if (!profile.isLoggedIn && Cookies.get("otb")) {
+      console.log("loading profile: "+JSON.stringify(Cookies.get()));
       // get the profile using the token.
       const requestOptions = {
         method: "GET",
@@ -26,18 +25,28 @@ const UserMenu = () => {
       let profile = await fetch("/api/crew/profile", requestOptions)
         .then(response => response.json())
         .catch(error => console.log(error));
-      dispatch(setUser(profile));
+      dispatch(setUser({user: profile, isLoggedIn: true}));
     }
   }
 
+  const logout = async () => {
+    const requestOptions = {
+      method: "GET",
+      headers: { "Authorization": "Bearer "+Cookies.get("otb")}
+    };
+    await fetch("/api/auth/logout", requestOptions);
+    dispatch(setUser({user: {}, isLoggedIn: false}));
+    Cookies.remove("otb");
+  };
+
   const loggedInList = () => {
-    if (profile.value.username) {
+    if (profile.isLoggedIn && profile.value) {
       return (
         <>
           <Dropdown.Item href="/crew">{profile.value.firstName}</Dropdown.Item>
           <p className="form-text dropdown-item">Boats</p>
           <Dropdown.Divider></Dropdown.Divider>
-          <Dropdown.Item>Logout</Dropdown.Item>
+          <Dropdown.Item onClick={() => logout()}>Logout</Dropdown.Item>
         </>
       );
     } else {
@@ -53,7 +62,7 @@ const UserMenu = () => {
     <>
       <Dropdown>
         <Dropdown.Toggle id="dropdown-basic">
-          {profile.value.username && profile.value.firstName}
+          {profile.value && profile.value.username && profile.value.firstName}
           <PersonIcon></PersonIcon>
         </Dropdown.Toggle>
         <Dropdown.Menu className="dropdown-menu-end">

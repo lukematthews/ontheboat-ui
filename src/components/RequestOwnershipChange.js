@@ -23,7 +23,7 @@ export const RequestOwnershipChange = (props) => {
   };
 
   const RequestOwnerChangeButton = () => {
-    if (profile.value.id) {
+    if (profile.isLoggedIn) {
       return (
         <Button onClick={() => changeOwner()}>Request Ownership Change</Button>
       );

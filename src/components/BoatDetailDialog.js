@@ -11,7 +11,7 @@ const BoatDetailDialog = (props) => {
   const profile = useSelector((state) => state.user);
   const [show, setShow] = useState(true);
   const handleClose = () => setShow(false);
-  let loggedIn = profile.value.id ? true : false;
+  let loggedIn = profile.isLoggedIn;
 
   let boatDetails = props.boat && props.boat.boatDetails;
   // if (boatDetails) {
