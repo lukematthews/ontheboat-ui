@@ -9,7 +9,7 @@ import OwnedBoats from "./OwnedBoats";
 const CrewHome = (props) => {
   const profile = useSelector((state) => state.user);
 
-  if (!profile.isLoggedIn) {
+  if (!profile.isLoggedIn || !profile.value) {
     return <></>;
   }
   return (

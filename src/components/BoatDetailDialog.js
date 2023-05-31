@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import BoatDetail from "./BoatDetail";
 import { useNavigate } from "react-router-dom";
+import { ownsBoat } from "../common/SharedFunctions";
 
 const BoatDetailDialog = (props) => {
   const profile = useSelector((state) => state.user);
@@ -14,9 +15,6 @@ const BoatDetailDialog = (props) => {
   let loggedIn = profile.isLoggedIn;
 
   let boatDetails = props.boat && props.boat.boatDetails;
-  // if (boatDetails) {
-  // boatDetails.contact = props.boat.contact;
-  // }
 
   useEffect(() => {
     setShow(true);
@@ -42,7 +40,7 @@ const BoatDetailDialog = (props) => {
                   <BoatDetail boat={props.boat}></BoatDetail>
                 </Modal.Body>
                 <Modal.Footer>
-                  <EditButton loggedIn={loggedIn}></EditButton>
+                  <EditButton loggedIn={loggedIn} boat={props.boat}></EditButton>
                 </Modal.Footer>
               </Modal>
             </Col>
@@ -55,17 +53,22 @@ const BoatDetailDialog = (props) => {
 
 const EditButton = (props) => {
   const navigate = useNavigate();
-  let message = props.loggedIn
+  const profile = useSelector((state) => state.user);
+
+  // let ownedBoat = profile.value.ownedBoats.find(b => b.id === props.boat.id);
+  let crewOwnsBoat = ownsBoat(profile.value, props.boat);
+
+  let message = crewOwnsBoat
     ? "Edit the details of this boat"
-    : "Login to be able to edit boat details of boats you own";
-  let style = props.loggedIn ? {} : { pointerEvents: "none" };
+    : "Login to be able to edit boat details of boats that you own";
+  let style = crewOwnsBoat ? {} : { pointerEvents: "none" };
   return (
     <OverlayTrigger
       overlay={<Tooltip id="tooltip-disabled">{message}</Tooltip>}
     >
       <span className="d-inline-block">
         <Button
-          disabled={!props.loggedIn}
+          disabled={!crewOwnsBoat}
           style={style}
           onClick={() => {
             navigate("/boat-detail");

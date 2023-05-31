@@ -12,7 +12,6 @@ import { RequestOwnershipChange } from "./RequestOwnershipChange";
 
 const BoatDetail = (props) => {
   const profile = useSelector((state) => state.user);
-  const [show, setShow] = useState(false);
 
   let boatDetails = { ...(props.boat && props.boat.boatDetails) };
   if (boatDetails) {
@@ -43,8 +42,8 @@ const BoatDetail = (props) => {
                 <Row>
                   <Col>
                     <Bio
-                      loggedIn={profile.loggedIn ? true : false}
                       details={boatDetails}
+                      editable={props.editable}
                     />
                   </Col>
                 </Row>
@@ -53,13 +52,13 @@ const BoatDetail = (props) => {
                     name="Design"
                     field="design"
                     boatDetails={boatDetails}
-                    loggedIn={profile.loggedn ? true : false}
+                    props={props}
                   ></Field>
                   <Field
                     name="Colour"
                     field="hullColour"
                     boatDetails={boatDetails}
-                    loggedIn={profile.loggedn ? true : false}
+                    props={props}
                   ></Field>
                 </Row>
                 <Row className="mt-0">
@@ -67,13 +66,13 @@ const BoatDetail = (props) => {
                     name="Hull Material"
                     field="hullMaterial"
                     boatDetails={boatDetails}
-                    loggedIn={profile.loggedn ? true : false}
+                    props={props}
                   ></Field>
                   <Field
                     name="Length"
                     field="lengthOverall"
                     boatDetails={boatDetails}
-                    loggedIn={profile.loggedn ? true : false}
+                    props={props}
                   ></Field>
                 </Row>
                 <Row className="mt-0">
@@ -81,13 +80,13 @@ const BoatDetail = (props) => {
                     name="Rig"
                     field="rig"
                     boatDetails={boatDetails}
-                    loggedIn={profile.loggedn ? true : false}
+                    props={props}
                   ></Field>
                   <Field
                     name="Launch Year"
                     field="launchYear"
                     boatDetails={boatDetails}
-                    loggedIn={profile.loggedn ? true : false}
+                    props={props}
                   ></Field>
                 </Row>
                 <Row className="mt-0">
@@ -95,9 +94,9 @@ const BoatDetail = (props) => {
                     name="Contact"
                     field="contact"
                     boatDetails={boatDetails}
-                    loggedIn={profile.loggedn ? true : false}
+                    props={props}
                   ></Field>
-                  <div className="col-xs-12 col-lg-6">
+                  <div className="py-2 col-xs-12 col-lg-6">
                     {props.editable && (
                       <RequestOwnershipChange
                         boatDetails={boatDetails}
@@ -173,27 +172,27 @@ const BoatDetail = (props) => {
   );
 };
 
-const Field = ({ loggedIn, boatDetails, name, field }) => {
-  // field
-  // let fieldClass = field ? "px-1 mb-1 border rounded-1" : "";
-  let fieldClass = loggedIn ? "" : "form-control-plaintext";
-
+const Field = ({ boatDetails, name, field, props }) => {
+  let fieldClass = props.editable ? "" : "form-control-plaintext";
+  let fieldStyle = props.editable
+    ? {}
+    : { backgroundColor: "unset", opacity: "unset" };
   return (
     <>
-      <div className="col-xs-12 col-lg-3">
+      <div className="col-xs-12 col-lg-3 my-1">
         <Form.Label column className="fw-bold">
           {name}
         </Form.Label>
       </div>
-      <div className="col-xs-12 col-lg-3">
+      <div className="col-xs-12 col-lg-3 my-1">
         <Form.Control
           type="text"
-          disabled={!loggedIn}
+          disabled={!props.editable}
           defaultValue={boatDetails[field]}
           onChange={(e) => {
             boatDetails[field] = e.target.value;
           }}
-          style={{ backgroundColor: "unset", opacity: "unset" }}
+          style={fieldStyle}
           className={fieldClass}
         ></Form.Control>
       </div>
@@ -201,29 +200,14 @@ const Field = ({ loggedIn, boatDetails, name, field }) => {
   );
 };
 
-const ParsedText = ({ boatId, children }) => {
-  if (!children) {
-    return (
-      <span key={`bio-${boatId}-0`}>
-        <br />
-      </span>
-    );
-  }
-  return children.split("\n").map((line, index) => (
-    <span key={`bio-${boatId}-${index}`}>
-      {line}
-      <br />
-    </span>
-  ));
-};
-
 const Bio = (props) => {
   let fieldClass = "form-control ";
-  if (!props.loggedIn) {
+  let style = {};
+  if (!props.editable) {
     fieldClass = fieldClass + "form-control-plaintext";
+    style = { backgroundColor: "unset", opacity: "unset" };
   }
   return (
-    
     <>
       <Form.Label className="fw-bold form-label col-form-label">Bio</Form.Label>
       <textarea
@@ -231,6 +215,8 @@ const Bio = (props) => {
         type="text"
         defaultValue={props.details.bio}
         rows={5}
+        disabled={!props.editable}
+        style={style}
       />
     </>
   );

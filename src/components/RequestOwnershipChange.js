@@ -120,7 +120,7 @@ export const RequestOwnershipChange = (props) => {
             </Container>
           </Modal.Body>
           <Modal.Footer>
-            <Button type="submit">Ok</Button>
+            <Button type="submit">Submit</Button>
             <Button onClick={() => handleClose()}>Cancel</Button>
           </Modal.Footer>
         </Form>
