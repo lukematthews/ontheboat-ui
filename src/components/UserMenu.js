@@ -16,7 +16,6 @@ const UserMenu = () => {
 
   const loadProfile = async () => {
     if (!profile.isLoggedIn && Cookies.get("otb")) {
-      console.log("loading profile: "+JSON.stringify(Cookies.get()));
       // get the profile using the token.
       const requestOptions = {
         method: "GET",

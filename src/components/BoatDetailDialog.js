@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import BoatDetail from "./BoatDetail";
 import { useNavigate } from "react-router-dom";
-import { ownsBoat } from "../common/SharedFunctions";
+import { ownsBoat } from "../common/Utils";
 
 const BoatDetailDialog = (props) => {
   const profile = useSelector((state) => state.user);

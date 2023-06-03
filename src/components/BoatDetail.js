@@ -3,15 +3,13 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import QRCode from "react-qr-code";
 import { Button, Card, Accordion, Form } from "react-bootstrap";
-import { useState } from "react";
 import { Paper } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import Handicaps from "./Handicaps";
-import { useSelector } from "react-redux";
 import { RequestOwnershipChange } from "./RequestOwnershipChange";
+import { ModelField } from "../common/Utils";
 
 const BoatDetail = (props) => {
-  const profile = useSelector((state) => state.user);
 
   let boatDetails = { ...(props.boat && props.boat.boatDetails) };
   if (boatDetails) {
@@ -41,67 +39,57 @@ const BoatDetail = (props) => {
               <Container>
                 <Row>
                   <Col>
-                    <Bio
-                      details={boatDetails}
-                      editable={props.editable}
-                    />
+                    <Bio details={boatDetails} editable={props.editable} />
                   </Col>
                 </Row>
                 <Row>
-                  <Field
+                  <ModelField
                     name="Design"
                     field="design"
-                    boatDetails={boatDetails}
+                    model={boatDetails}
                     props={props}
-                  ></Field>
-                  <Field
+                  ></ModelField>
+                  <ModelField
                     name="Colour"
                     field="hullColour"
-                    boatDetails={boatDetails}
+                    model={boatDetails}
                     props={props}
-                  ></Field>
+                  ></ModelField>
                 </Row>
                 <Row className="mt-0">
-                  <Field
+                  <ModelField
                     name="Hull Material"
                     field="hullMaterial"
-                    boatDetails={boatDetails}
+                    model={boatDetails}
                     props={props}
-                  ></Field>
-                  <Field
+                  ></ModelField>
+                  <ModelField
                     name="Length"
                     field="lengthOverall"
-                    boatDetails={boatDetails}
+                    model={boatDetails}
                     props={props}
-                  ></Field>
+                  ></ModelField>
                 </Row>
                 <Row className="mt-0">
-                  <Field
+                  <ModelField
                     name="Rig"
                     field="rig"
-                    boatDetails={boatDetails}
+                    model={boatDetails}
                     props={props}
-                  ></Field>
-                  <Field
+                  ></ModelField>
+                  <ModelField
                     name="Launch Year"
                     field="launchYear"
-                    boatDetails={boatDetails}
+                    model={boatDetails}
                     props={props}
-                  ></Field>
+                  ></ModelField>
                 </Row>
                 <Row className="mt-0">
-                  <Field
-                    name="Contact"
-                    field="contact"
-                    boatDetails={boatDetails}
-                    props={props}
-                  ></Field>
+                  <ContactField boatDetails={boatDetails} props={props}></ContactField>
                   <div className="py-2 col-xs-12 col-lg-6">
-                    {props.editable && (
-                      <RequestOwnershipChange
-                        boatDetails={boatDetails}
-                      ></RequestOwnershipChange>
-                    )}
+                    <RequestOwnershipChange
+                      boatDetails={boatDetails}
+                    ></RequestOwnershipChange>
                   </div>
                 </Row>
               </Container>
@@ -172,33 +160,37 @@ const BoatDetail = (props) => {
   );
 };
 
-const Field = ({ boatDetails, name, field, props }) => {
-  let fieldClass = props.editable ? "" : "form-control-plaintext";
-  let fieldStyle = props.editable
-    ? {}
-    : { backgroundColor: "unset", opacity: "unset" };
+const ContactField = ({boatDetails, props}) => {
+  let fieldClass = "form-control-plaintext";
+  let fieldStyle = { backgroundColor: "unset", opacity: "unset" };
+
+  const renderOwnerNames = () => {
+    if (!props.boat.owners) {
+      return "";
+    }
+    return props.boat.owners.map(owner => owner.firstName ? owner.firstName : ''+" "+owner.lastName ? owner.lastName : '').join(", ");
+  };
+
   return (
     <>
       <div className="col-xs-12 col-lg-3 my-1">
         <Form.Label column className="fw-bold">
-          {name}
+          Owners
         </Form.Label>
       </div>
       <div className="col-xs-12 col-lg-3 my-1">
         <Form.Control
           type="text"
-          disabled={!props.editable}
-          defaultValue={boatDetails[field]}
-          onChange={(e) => {
-            boatDetails[field] = e.target.value;
-          }}
-          style={fieldStyle}
+          disabled
           className={fieldClass}
+          style={fieldStyle}
+          defaultValue={renderOwnerNames()}
         ></Form.Control>
       </div>
     </>
   );
 };
+
 
 const Bio = (props) => {
   let fieldClass = "form-control ";

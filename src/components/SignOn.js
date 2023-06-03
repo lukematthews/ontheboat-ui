@@ -11,6 +11,7 @@ function SignOn() {
   const [loading, setLoading] = useState("Loading");
   const [boat, setBoatDetails] = useState({name: '', sailNumber: '', id: ''});
   const selectedBoat = useSelector((state) => state.selectedBoat);
+  const profile = useSelector(state => state.user);
 
   // has a boat id been passed in via the props? use that.
   // is there a boat in redux? use that.

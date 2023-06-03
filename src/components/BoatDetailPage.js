@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Modal } from "react-bootstrap";
-import { ownsBoat } from "../common/SharedFunctions";
+import { ownsBoat } from "../common/Utils";
 
 const BoatDetailPage = (props) => {
   const [searchParams, setSearchParams] = useSearchParams();
