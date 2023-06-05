@@ -3,15 +3,22 @@ import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import BoatSearch from "./BoatSearch";
 import { useSelector } from "react-redux";
-import Cookies from "js-cookie";
+import { Cookies, useCookies } from "react-cookie";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
 
 function SignOn() {
   let [boatId] = useSearchParams();
   let boatIdValue;
   const [loading, setLoading] = useState("Loading");
-  const [boat, setBoatDetails] = useState({name: '', sailNumber: '', id: ''});
+  const [boat, setBoatDetails] = useState({ name: "", sailNumber: "", id: "" });
   const selectedBoat = useSelector((state) => state.selectedBoat);
-  const profile = useSelector(state => state.user);
+  const profile = useSelector((state) => state.user);
+  const [cookies, setCookie, removeCookie] = useCookies([
+    "otb",
+    "lastBoatOnboard",
+    "lastCrew",
+  ]);
 
   // has a boat id been passed in via the props? use that.
   // is there a boat in redux? use that.
@@ -21,25 +28,30 @@ function SignOn() {
     boatIdValue = boatId.get("id");
   } else if (selectedBoat.value.id) {
     boatIdValue = selectedBoat.value.id;
-  } else if (Cookies.get("lastBoatOnboard")) {
-    boatIdValue = Cookies.get("lastBoatOnboard");
+  } else if (cookies.lastBoatOnboard) {
+    boatIdValue = cookies.lastBoatOnboard;
   }
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
+  const [duration, setDuration] = useState(dayjs());
   const [rememberMe, setRememberMe] = useState(false);
+  const [detailsChanged, setDetailsChanged] = useState(false);
 
   const toJson = () => {
+    let uuid = detailsChanged === true ? null : profile.value.uuid;
+
     return JSON.stringify({
-      "firstName": firstName,
-      "lastName": lastName,
-      "mobile": mobile,
-      "email": email,
-      "rememberMe": rememberMe,
-      "boatId": boatIdValue,
-      "uuid": "none",
+      firstName: firstName,
+      lastName: lastName,
+      mobile: mobile,
+      email: email,
+      rememberMe: rememberMe,
+      duration: duration,
+      boatId: boatIdValue,
+      uuid: uuid,
     });
   };
 
@@ -52,19 +64,23 @@ function SignOn() {
   };
 
   const loadBoat = async () => {
-    const response = await fetch(`/api/marina/boat-details?boatId=${boatIdValue}`);
+    const response = await fetch(
+      `/api/marina/boat-details?boatId=${boatIdValue}`
+    );
     const data = await response.json();
     setBoatDetails(data);
     setLoading("");
   };
 
   useEffect(() => {
-    if (Cookies.get("lastBoatOnboard")) {
-      boatIdValue = Cookies.get("lastBoatOnboard");
+    if (cookies.lastBoatOnboard) {
+      boatIdValue = cookies.lastBoatOnboard;
     }
 
-    if (Cookies.get("crewUUID")) {
-      loadCrew(Cookies.get("crewUUID"));
+    if (cookies.lastCrew) {
+      loadCrew(cookies.lastCrew);
+    } else if (profile.isLoggedIn === true) {
+      loadCrew(profile.value.uuid);
     }
     if (boatIdValue && loading !== "") {
       loadBoat();
@@ -73,10 +89,14 @@ function SignOn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let signOnRequest = toJson();
     let res = await fetch("/api/crew/sign-on", {
       method: "POST",
-      body: toJson(),
+      body: signOnRequest,
       headers: { "Content-Type": "application/json" },
+    }).then((response) => {
+      console.log(response);
+      response.json()
     });
   };
 
@@ -136,8 +156,7 @@ function SignOn() {
                 autoComplete="first-name"
                 value={firstName}
                 onChange={(e) => {
-                  // crewRequest.firstName = e.target.value;
-                  // setCrewRequest(crewRequest);
+                  setDetailsChanged(true);
                   setFirstName(e.target.value);
                 }}
               />
@@ -150,6 +169,7 @@ function SignOn() {
                 autoComplete="family-name"
                 value={lastName}
                 onChange={(e) => {
+                  setDetailsChanged(true);
                   setLastName(e.target.value);
                 }}
               />
@@ -162,6 +182,7 @@ function SignOn() {
                 autoComplete="tel"
                 value={mobile}
                 onChange={(e) => {
+                  setDetailsChanged(true);
                   setMobile(e.target.value);
                 }}
               />
@@ -174,31 +195,22 @@ function SignOn() {
                 autoComplete="email"
                 value={email}
                 onChange={(e) => {
+                  setDetailsChanged(true);
                   setEmail(e.target.value);
                 }}
               />
             </Form.Group>
             <Form.Group controlId="duration">
-              <Form.Label>How long?</Form.Label>
-              <Form.Select
-                type="select"
-                label="How long?"
-                onChange={(e) => {
-                }}
-              >
-                <option>Today</option>
-                <option>For the race</option>
-              </Form.Select>
-            </Form.Group>
-            <Form.Group controlId="rememberMe">
-              <Form.Check
-                type="checkbox"
-                label="Remember me"
-                value={rememberMe}
-                onChange={(e) => {
-                  setRememberMe(e.target.checked);
-                }}
-              />
+              <Form.Label>When?</Form.Label>
+              <div>
+                <DatePicker
+                  defaultValue={dayjs()}
+                  slotProps={{ textField: { size: "small" } }}
+                  value={duration}
+                  onChange={(e) => setDuration(e)}
+                  className="form-control"
+                />
+              </div>
             </Form.Group>
             <div className="mb-3"></div>
             <Form.Group>

@@ -23,9 +23,14 @@ const Boats = () => {
   const fetchData = async () => {
     const response = await fetch(
       `/api/marina/search-page?search=${search}&page=${paginationModel.page}&size=${paginationModel.pageSize}`
-    );
-    const data = await response.json();
-    updatePage(data);
+    )
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Failed to call API");
+      })
+      .then((response) => updatePage(response));
   };
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
@@ -56,14 +61,20 @@ const Boats = () => {
   }, [paginationModel]);
 
   const selectionChanged = (boat) => {
-    dispatch(setSelectedBoatRegister({ ...page.content.find((row) => row.id == boat) }));
+    dispatch(
+      setSelectedBoatRegister({ ...page.content.find((row) => row.id == boat) })
+    );
   };
 
   return (
     <Row>
       <Col>
-        <Form onSubmit={(e) => {e.preventDefault(); doSearch();}
-        }>
+        <Form
+          onSubmit={(e) => {
+            e.preventDefault();
+            doSearch();
+          }}
+        >
           <InputGroup>
             <Form.Control
               value={search}

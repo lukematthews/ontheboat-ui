@@ -15,6 +15,7 @@ const OwnedBoats = (props) => {
         action
         className="boat-row"
         onClick={(e) => navigate(`/boat-detail?boatId=${props.boat.id}`)}
+        href={"#boat-"+props.boat.id}
       >
         {props.boat.boatName}
       </ListGroup.Item>
@@ -22,7 +23,7 @@ const OwnedBoats = (props) => {
   };
 
   if (profile.isLoggedIn && profile.value.ownedBoats) {
-    return <ListGroup>
+    return <ListGroup defaultActiveKey={"#boat-"+profile.value.ownedBoats.length > 0 ? profile.value.ownedBoats[0].id : "" }>
       {profile.value.ownedBoats.map((boat) => (
         <Boat boat={boat} key={boat.id}></Boat>
       ))}
