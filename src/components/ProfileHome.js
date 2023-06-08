@@ -1,25 +1,23 @@
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { formField, FormField } from "../common/Utils";
+import { apiCall, formField, FormField } from "../common/Utils";
 import { Form } from "react-final-form";
 import { Cookies, useCookies } from "react-cookie";
+import { useFetch } from "../common/Utils";
 
 export const ProfileHome = (props) => {
   const profile = useSelector((state) => state.user);
-  const [cookies, setCookie, removeCookie] = useCookies(['otb']);
+  const [cookies, setCookie, removeCookie] = useCookies(["otb"]);
   const editableProfile = Object.assign({}, profile.value);
 
   const onSubmit = (e) => {
-    console.log(e);
-    let data = cookies.otb;
-    const requestOptions = {
+    apiCall({
+      endpoint: "/crew/profile",
+      body: e,
+      jwt: cookies.otb,
+      handlerCallback: handleResponse,
       method: "PUT",
-      headers: { "Content-Type": "application/json", "Authorization": "Bearer "+data},
-      body: JSON.stringify(e),
-    };
-    fetch("/api/crew/profile", requestOptions)
-      .then((response) => response.json())
-      .then((data) => handleResponse(data));
+    });
   };
 
   const handleResponse = (response) => {};

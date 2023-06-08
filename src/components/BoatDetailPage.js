@@ -4,22 +4,21 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Modal } from "react-bootstrap";
-import { ownsBoat } from "../common/Utils";
+import { ownsBoat, apiCall } from "../common/Utils";
 
 const BoatDetailPage = (props) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const boatId = searchParams.get("boatId");
   const selectedBoat = useSelector((state) => state.boatRegisterSelectedBoat);
-  const profile = useSelector(state => state.user);
+  const profile = useSelector((state) => state.user);
   const [boat, setBoat] = useState({});
   const navigate = useNavigate();
 
   const fetchBoat = async (boatId) => {
-    await fetch(`/api/marina/boat-details?boatId=${boatId}`)
-      .then((response) => response.json())
-      .then((boat) => {
-        setBoat(boat);
-      });
+    apiCall({
+      endpoint: `/marina/boat-details?boatId=${boatId}`,
+      handlerCallback: (boat) => {setBoat(boat)},
+    });
   };
 
   useEffect(() => {
@@ -42,7 +41,10 @@ const BoatDetailPage = (props) => {
           </p>
         </Modal.Title>
       </Modal.Header>
-      <BoatDetail boat={boat} editable={ownsBoat(profile?.value, boat)}></BoatDetail>
+      <BoatDetail
+        boat={boat}
+        editable={ownsBoat(profile?.value, boat)}
+      ></BoatDetail>
     </>
   );
 };

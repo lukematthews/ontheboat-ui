@@ -6,6 +6,8 @@ import OwnedBoats from "./OwnedBoats";
 import { ProfileHome } from "./ProfileHome";
 import Nav from "react-bootstrap/Nav";
 import { useState } from "react";
+import Onboard from "./Onboard";
+import { BoatProfile } from "./BoatProfile";
 
 const CrewHome = (props) => {
   const profile = useSelector((state) => state.user);
@@ -31,7 +33,9 @@ const CrewHome = (props) => {
                 setActiveTab(e);
               }}
             >
-              <div className="h1" style={{paddingRight: "30px"}}>{profile.value.firstName}</div>
+              <div className="h1" style={{ paddingRight: "30px" }}>
+                {profile.value.firstName}
+              </div>
               <Nav.Item>
                 <Nav.Link eventKey="1">Profile</Nav.Link>
               </Nav.Item>
@@ -44,18 +48,14 @@ const CrewHome = (props) => {
         </Row>
         <Row style={displayTab("2")}>
           <Col>
-            <div className="h2">My Boats</div>
-            <OwnedBoats></OwnedBoats>
-          </Col>
-          <Col>
-            <div className="h2">Stats</div>
-            <div className="h3">Number of times:</div>
-            <div className="h3">Total amount of time:</div>
-            <div className="h3">Results</div>
+          <BoatProfile></BoatProfile>
           </Col>
         </Row>
         <Row style={displayTab("1")}>
-          <ProfileHome></ProfileHome>
+          <Col>
+            <div className="h2">My Boats</div>
+            <ProfileHome></ProfileHome>
+          </Col>
         </Row>
       </Container>
     </>

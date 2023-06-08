@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../features/userSlice";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
+import { apiCall } from "../common/Utils";
 const UserMenu = () => {
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.user);
@@ -16,15 +17,20 @@ const UserMenu = () => {
 
   const loadProfile = async () => {
     if (!profile.isLoggedIn && Cookies.get("otb")) {
-      // get the profile using the token.
-      const requestOptions = {
-        method: "GET",
-        headers: { "Authorization": "Bearer "+Cookies.get("otb")}
-      };
-      let profile = await fetch("/api/crew/profile", requestOptions)
-        .then(response => response.json())
-        .catch(error => console.log(error));
-      dispatch(setUser({user: profile, isLoggedIn: true}));
+      // // get the profile using the token.
+      // const requestOptions = {
+      //   method: "GET",
+      //   headers: { "Authorization": "Bearer "+Cookies.get("otb")}
+      // };
+      // let profile = await fetch("/api/crew/profile", requestOptions)
+      //   .then(response => response.json())
+      //   .catch(error => console.log(error));
+      // dispatch(setUser({user: profile, isLoggedIn: true}));
+      apiCall({
+        endpoint: "/crew/profile", 
+        jwt: Cookies.get("otb"), 
+        handlerCallback: (profile) => dispatch(setUser({user: profile, isLoggedIn: true}))
+        });
     }
   }
 

@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSelectedBoat } from "../features/selectedBoatSlice";
 import { Search } from "@mui/icons-material";
 
-const BoatSearch = () => {
+const BoatSearch = (props) => {
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
   const selectedBoat = useSelector((state) => state.selectedBoat);
@@ -20,7 +20,7 @@ const BoatSearch = () => {
     setShow(false);
     if (event) {
       let boat = results.rows[selectedIndex];
-      dispatch(setSelectedBoat(boat));
+      dispatch(setSelectedBoat(Object.assign({}, boat)));
     } else {
       dispatch(setSelectedBoat({}));
     }
@@ -32,7 +32,7 @@ const BoatSearch = () => {
 
   const runSearch = (event) => {
     if (!search) {
-      setResults({rows: []});
+      setResults({ rows: [] });
       return;
     }
     event.preventDefault();
@@ -64,11 +64,20 @@ const BoatSearch = () => {
     </ListItemButton>
   ));
 
+  const button = () => {
+    if (props.var === "button") {
+      return (
+        <Button variant="primary" onClick={handleShow}>
+          Find Boat
+        </Button>
+      );
+    } else {
+      return <a onClick={handleShow} href="#" style={{fontSize: "12px"}}>Change boat</a>
+    }
+  };
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        Find Boat
-      </Button>
+      {button()}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Find a boat</Modal.Title>

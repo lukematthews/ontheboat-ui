@@ -5,6 +5,7 @@ import { setUser } from "../features/userSlice";
 import { useNavigate } from "react-router-dom";
 import base64 from "base-64";
 import Cookies from "js-cookie";
+import { apiCall } from "../common/Utils";
 
 const Login = (props) => {
   const navigate = useNavigate();

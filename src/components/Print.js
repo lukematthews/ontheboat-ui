@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 import { useSearchParams } from "react-router-dom";
+import { apiCall } from "../common/Utils";
 
 const Print = (props) => {
   let [boatId] = useSearchParams();
@@ -10,12 +11,15 @@ const Print = (props) => {
   const [signOnUrl, setSignOnUrl] = useState("");
 
   const fetchData = async () => {
-    const response = await fetch(`/api/marina/boat-details?boatId=${boatIdValue}`);
-    const data = await response.json();
-    setBoat(data);
-    setSignOnUrl(
-      process.env.REACT_APP_EXTERNAL_IP + "/signOn?id=" + boatIdValue
-    );
+    apiCall({
+      endpoint: `/marina/boat-details?boatId=${boatIdValue}`,
+      handlerCallback: (data) => {
+        setBoat(data);
+        setSignOnUrl(
+          process.env.REACT_APP_EXTERNAL_IP + "/signOn?id=" + boatIdValue
+        );
+      },
+    });
   };
 
   useEffect(() => {
@@ -25,7 +29,7 @@ const Print = (props) => {
   return (
     <>
       <div>
-        <QRCode value={signOnUrl} size={400}/>
+        <QRCode value={signOnUrl} size={400} />
       </div>
       <div>
         <p>

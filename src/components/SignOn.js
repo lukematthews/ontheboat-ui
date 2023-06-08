@@ -2,16 +2,17 @@ import { useEffect, useState } from "react";
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import BoatSearch from "./BoatSearch";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Cookies, useCookies } from "react-cookie";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
+import { setSelectedBoat } from "../features/selectedBoatSlice";
 
 function SignOn() {
   let [boatId] = useSearchParams();
   let boatIdValue;
   const [loading, setLoading] = useState("Loading");
-  const [boat, setBoatDetails] = useState({ name: "", sailNumber: "", id: "" });
+  const dispatch = useDispatch();
   const selectedBoat = useSelector((state) => state.selectedBoat);
   const profile = useSelector((state) => state.user);
   const [cookies, setCookie, removeCookie] = useCookies([
@@ -68,7 +69,7 @@ function SignOn() {
       `/api/marina/boat-details?boatId=${boatIdValue}`
     );
     const data = await response.json();
-    setBoatDetails(data);
+    dispatch(setSelectedBoat(Object.assign({}, data)));
     setLoading("");
   };
 
@@ -85,7 +86,7 @@ function SignOn() {
     if (boatIdValue && loading !== "") {
       loadBoat();
     }
-  }, [boatIdValue, loading]);
+  }, [boatIdValue, loading, selectedBoat.value]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -109,11 +110,14 @@ function SignOn() {
   };
 
   const displayBoat = () => {
-    return (
+    return (<>
       <div>
-        <span className="h1">{boat.boatName}</span>{" "}
-        <span className="h3">{boat.sailNumber}</span>
+        <span className="h1">{selectedBoat.value.boatName}</span>{" "}
+        <span className="h3">{selectedBoat.value.sailNumber}</span>
       </div>
+      <div>
+        <BoatSearch var="link"></BoatSearch>
+      </div></>
     );
   };
 
@@ -124,7 +128,7 @@ function SignOn() {
           <h1>Sign On</h1>
           <p>Use this page to sign yourself as being on board a boat.</p>
           <p>
-            <BoatSearch></BoatSearch>
+            <BoatSearch var="button"></BoatSearch>
           </p>
         </div>
         <div></div>
@@ -145,7 +149,7 @@ function SignOn() {
             <Form.Control
               type="text"
               style={{ display: "none" }}
-              value={boat.id}
+              value={selectedBoat.id}
               readOnly
             ></Form.Control>
             <Form.Group controlId="firstName">

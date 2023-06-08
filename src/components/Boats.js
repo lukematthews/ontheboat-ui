@@ -5,6 +5,7 @@ import { Search } from "@mui/icons-material";
 import BoatDetailDialog from "./BoatDetailDialog";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedBoatRegister } from "../features/boatRegisterSlice";
+import { apiCall } from "../common/Utils";
 
 const Boats = () => {
   const dispatch = useDispatch();
@@ -21,16 +22,11 @@ const Boats = () => {
   });
   const [search, setSearch] = useState("");
   const fetchData = async () => {
-    const response = await fetch(
-      `/api/marina/search-page?search=${search}&page=${paginationModel.page}&size=${paginationModel.pageSize}`
-    )
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error("Failed to call API");
-      })
-      .then((response) => updatePage(response));
+      apiCall({
+        endpoint: `/marina/search-page?search=${search}&page=${paginationModel.page}&size=${paginationModel.pageSize}`,
+        handlerCallback: updatePage,
+      });
+  
   };
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
@@ -38,11 +34,10 @@ const Boats = () => {
   });
 
   const doSearch = async () => {
-    const response = await fetch(
-      `/api/marina/search-page?search=${search}&page=${paginationModel.page}&size=${paginationModel.pageSize}`
-    );
-    const data = await response.json();
-    updatePage(data);
+    apiCall({
+      endpoint: `/marina/search-page?search=${search}&page=${paginationModel.page}&size=${paginationModel.pageSize}`,
+      handlerCallback: updatePage,
+    });
   };
 
   const updatePage = (data) => {
