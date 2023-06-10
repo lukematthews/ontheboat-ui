@@ -4,4 +4,4 @@ services:
       context: .
     container_name: marina-ui
     ports:
-      - "80:80"
+      - "8000:8000"

@@ -12,20 +12,20 @@ const Login = (props) => {
   const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
-    let auth =  'Basic ' + base64.encode(e.username + ":" + e.password);
     const requestOptions = {
       method: "POST",
-      headers: { "Authorization": auth},
+      body: JSON.stringify({username: e.username, password: e.password}),
+      headers: {"Content-Type": "application/json"}
     };
 
-    await fetch("/api/auth/token", requestOptions)
-      .then((response) => response.text())
+    await fetch("/api/auth-2/signin", requestOptions)
+      .then((response) => response.json())
       .then(data => handleLoginResponse(data));
   };
 
   const handleLoginResponse = async (data) => {
     // setCookie("token", data, {path: "/"});
-    Cookies.set("otb", data, )
+    Cookies.set("otb", data.token, )
 
     // get the profile for the user.
     const requestOptions = {
