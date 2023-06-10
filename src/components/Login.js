@@ -18,7 +18,7 @@ const Login = (props) => {
       headers: {"Content-Type": "application/json"}
     };
 
-    await fetch("/api/auth-2/signin", requestOptions)
+    await fetch("/api/auth/signin", requestOptions)
       .then((response) => response.json())
       .then(data => handleLoginResponse(data));
   };
