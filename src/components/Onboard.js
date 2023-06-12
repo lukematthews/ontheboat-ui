@@ -15,7 +15,8 @@ const Onboard = (props, children) => {
       return;
     }
     apiCall({
-      endpoint: `/crew/onboard?boatId=${boatId}&day=${day}`,
+      endpoint: "/crew/onboard",
+      query: {boatId: boatId, day: day},
       handlerCallback: setOnboardList,
       jwt: cookies.otb,
     });

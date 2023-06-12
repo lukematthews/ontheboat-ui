@@ -23,7 +23,8 @@ const Boats = () => {
   const [search, setSearch] = useState("");
   const fetchData = async () => {
       apiCall({
-        endpoint: `/marina/search-page?search=${search}&page=${paginationModel.page}&size=${paginationModel.pageSize}`,
+        endpoint: "/marina/search-page",
+        query: {search : search, page: paginationModel.page, size: paginationModel.pageSize},
         handlerCallback: updatePage,
       });
   
@@ -35,7 +36,8 @@ const Boats = () => {
 
   const doSearch = async () => {
     apiCall({
-      endpoint: `/marina/search-page?search=${search}&page=${paginationModel.page}&size=${paginationModel.pageSize}`,
+      endpoint: "/marina/search-page",
+       query: {search : search, page: paginationModel.page, size: paginationModel.pageSize},
       handlerCallback: updatePage,
     });
   };

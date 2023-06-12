@@ -16,7 +16,8 @@ const BoatDetailPage = (props) => {
 
   const fetchBoat = async (boatId) => {
     apiCall({
-      endpoint: `/marina/boat-details?boatId=${boatId}`,
+      endpoint: "/marina/boat-details",
+      query: {boatId: boatId},
       handlerCallback: (boat) => {setBoat(boat)},
     });
   };

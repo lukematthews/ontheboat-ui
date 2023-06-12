@@ -4,11 +4,12 @@ import { Field } from "react-final-form";
 export const apiCall = async (
   {
     endpoint,
+    query,
     body,
     handlerCallback = (response) => {},
     jwt,
     method = "GET",
-  } = { endpoint, body, handlerCallback, jwt, method }
+  } = { endpoint, query, body, handlerCallback, jwt, method }
 ) => {
   const requestOptions = {
     method: method,
@@ -18,6 +19,9 @@ export const apiCall = async (
     },
     body: JSON.stringify(body),
   };
+  if (query) {
+    endpoint = endpoint + "?" + new URLSearchParams(query).toString();
+  }
   if (method === "GET") {
     delete requestOptions.body;
   }

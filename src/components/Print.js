@@ -12,7 +12,8 @@ const Print = (props) => {
 
   const fetchData = async () => {
     apiCall({
-      endpoint: `/marina/boat-details?boatId=${boatIdValue}`,
+      endpoint: "/marina/boat-details",
+      query: {boatId: boatIdValue},
       handlerCallback: (data) => {
         setBoat(data);
         setSignOnUrl(
