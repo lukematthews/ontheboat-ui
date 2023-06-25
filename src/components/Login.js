@@ -3,13 +3,14 @@ import { Form, Field } from "react-final-form";
 import { useDispatch } from "react-redux";
 import { setUser } from "../features/userSlice";
 import { useNavigate } from "react-router-dom";
-import base64 from "base-64";
 import Cookies from "js-cookie";
 import { apiCall } from "../common/Utils";
+import { useAuth } from "react-oidc-context";
 
 const Login = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const auth = useAuth();
 
   const handleSubmit = async (e) => {
     const requestOptions = {
@@ -57,6 +58,7 @@ const Login = (props) => {
     <Container>
       <Row>
         <Col>
+          <Button onClick={() => auth.signinRedirect()}>Keycloak Login</Button>
           <Form
             onSubmit={handleSubmit}
             initialValues={{}}

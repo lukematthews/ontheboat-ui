@@ -6,13 +6,23 @@ import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import store from "./store";
 import { CookiesProvider } from "react-cookie";
+import { AuthProvider } from "react-oidc-context";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+const oidcConfig = {
+  authority: "/auth/realms/ontheboat",
+  client_id: "ontheboat-ui",
+  redirect_uri: "http://localhost:3000/"
+};
+
 root.render(
   <React.StrictMode>
     <CookiesProvider>
       <Provider store={store}>
-        <App />
+        <AuthProvider {...oidcConfig}>
+          <App />
+        </AuthProvider>
       </Provider>
     </CookiesProvider>
   </React.StrictMode>

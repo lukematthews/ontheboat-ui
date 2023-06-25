@@ -6,49 +6,37 @@ import { setUser } from "../features/userSlice";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 import { apiCall } from "../common/Utils";
+import { useAuth } from "react-oidc-context";
+
 const UserMenu = () => {
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.user);
+  const auth = useAuth();
 
   useEffect(() => {
     loadProfile();
   }, [Cookies.get("otb")]);
 
-
   const loadProfile = async () => {
     if (!profile.isLoggedIn && Cookies.get("otb")) {
-      // // get the profile using the token.
-      // const requestOptions = {
-      //   method: "GET",
-      //   headers: { "Authorization": "Bearer "+Cookies.get("otb")}
-      // };
-      // let profile = await fetch("/api/crew/profile", requestOptions)
-      //   .then(response => response.json())
-      //   .catch(error => console.log(error));
-      // dispatch(setUser({user: profile, isLoggedIn: true}));
       apiCall({
-        endpoint: "/crew/profile", 
-        jwt: Cookies.get("otb"), 
-        handlerCallback: (profile) => dispatch(setUser({user: profile, isLoggedIn: true}))
-        });
+        endpoint: "/crew/profile",
+        jwt: Cookies.get("otb"),
+        handlerCallback: (profile) =>
+          dispatch(setUser({ user: profile, isLoggedIn: true })),
+      });
     }
-  }
+  };
 
   const logout = async () => {
-    const requestOptions = {
-      method: "GET",
-      headers: { "Authorization": "Bearer "+Cookies.get("otb")}
-    };
-    await fetch("/api/auth/logout", requestOptions);
-    dispatch(setUser({user: {}, isLoggedIn: false}));
-    Cookies.remove("otb");
+    auth.removeUser();
   };
 
   const loggedInList = () => {
-    if (profile.isLoggedIn && profile.value) {
+    if (auth.isAuthenticated) {
       return (
         <>
-          <Dropdown.Item href="/crew">{profile.value.firstName}</Dropdown.Item>
+          <Dropdown.Item href="/crew">{auth.user?.profile.preferred_username}</Dropdown.Item>
           <p className="form-text dropdown-item">Boats</p>
           <Dropdown.Divider></Dropdown.Divider>
           <Dropdown.Item onClick={() => logout()}>Logout</Dropdown.Item>
@@ -67,7 +55,7 @@ const UserMenu = () => {
     <>
       <Dropdown>
         <Dropdown.Toggle id="dropdown-basic">
-          {profile.value && profile.value.username && profile.value.firstName}
+          {auth.user?.profile.preferred_username}
           <PersonIcon></PersonIcon>
         </Dropdown.Toggle>
         <Dropdown.Menu className="dropdown-menu-end">
