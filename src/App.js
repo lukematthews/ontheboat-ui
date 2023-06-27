@@ -15,6 +15,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 function App() {
+  console.log(`Environment variable: ${process.env.REACT_APP_EXTERNAL_IP}`);
+  console.log(`Environment variable: ${process.env.REACT_APP_LOGON_REDIRECT}`);
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Router>

@@ -17,6 +17,7 @@
     "base-64": "^1.0.0",
     "bootstrap": "^5.2.3",
     "dayjs": "^1.11.8",
+    "env-cmd": "^10.1.0",
     "http-proxy-middleware": "^2.0.6",
     "js-cookie": "^3.0.5",
     "oidc-client-ts": "^2.2.4",
