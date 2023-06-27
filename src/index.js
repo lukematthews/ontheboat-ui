@@ -13,7 +13,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 const oidcConfig = {
   authority: "/auth/realms/ontheboat",
   client_id: "ontheboat-ui",
-  redirect_uri: "http://localhost:3000/"
+  redirect_uri: process.env.REACT_APP_LOGON_REDIRECT
 };
 
 root.render(
