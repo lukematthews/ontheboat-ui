@@ -6,7 +6,6 @@ import Print from "./components/Print";
 import { Container, Row, Col, Navbar, Nav } from "react-bootstrap";
 import CookieConsent from "react-cookie-consent";
 import SignUp from "./components/SignUp";
-import Login from "./components/Login";
 import UserMenu from "./components/UserMenu";
 import CrewHome from "./components/CrewHome";
 import Onboard from "./components/Onboard";
@@ -15,8 +14,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 function App() {
-  console.log(`Environment variable: ${process.env.REACT_APP_EXTERNAL_IP}`);
-  console.log(`Environment variable: ${process.env.REACT_APP_LOGON_REDIRECT}`);
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Router>
@@ -68,7 +65,6 @@ function App() {
                       <Route path="/signOn" element={<SignOn />}></Route>
                       <Route path="/print" element={<Print />}></Route>
                       <Route path="/signUp" element={<SignUp />}></Route>
-                      <Route path="/login" element={<Login />}></Route>
                       <Route path="/crew" element={<CrewHome />}></Route>
                       <Route path="/onboard" element={<Onboard />}></Route>
                       <Route

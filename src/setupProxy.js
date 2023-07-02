@@ -4,7 +4,7 @@ module.exports = function(app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'http://localhost:8001',
+      target: process.env.REACT_APP_GATEWAY,
       changeOrigin: true,
     })
   );
@@ -12,7 +12,7 @@ module.exports = function(app) {
   app.use(
     '/auth',
     createProxyMiddleware({
-      target: 'http://localhost:8001',
+      target: process.env.REACT_APP_KEYCLOAK,
       changeOrigin: true,
     })
   );

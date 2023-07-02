@@ -45,7 +45,7 @@ const UserMenu = () => {
     } else {
       return (
         <>
-          <Dropdown.Item href="/login">Login</Dropdown.Item>
+          <Dropdown.Item onClick={() => auth.signinRedirect()}>Login</Dropdown.Item>
         </>
       );
     }
