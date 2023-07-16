@@ -3,15 +3,21 @@ import PersonIcon from "@mui/icons-material/Person";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setUser } from "../features/userSlice";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import Cookies from "js-cookie";
 import { apiCall } from "../common/Utils";
-import { useAuth } from "react-oidc-context";
+// import { useAuth } from "react-oidc-context";
+import { useKeycloak } from "@react-keycloak/web";
 
 const UserMenu = () => {
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.user);
-  const auth = useAuth();
+  const { keycloak } = useKeycloak();
+  // const auth = useAuth();
+
+  const login = useCallback(() => {
+    keycloak?.login();
+  }, [keycloak]);
 
   useEffect(() => {
     loadProfile();
@@ -29,14 +35,15 @@ const UserMenu = () => {
   };
 
   const logout = async () => {
-    auth.removeUser();
+    // auth.removeUser();
   };
 
   const loggedInList = () => {
-    if (auth.isAuthenticated) {
+    // if (auth.isAuthenticated) {
+    if (keycloak?.authenticated) {
       return (
         <>
-          <Dropdown.Item href="/crew">{auth.user?.profile.preferred_username}</Dropdown.Item>
+          {/* <Dropdown.Item href="/crew">{auth.user?.profile.preferred_username}</Dropdown.Item> */}
           <p className="form-text dropdown-item">Boats</p>
           <Dropdown.Divider></Dropdown.Divider>
           <Dropdown.Item onClick={() => logout()}>Logout</Dropdown.Item>
@@ -45,7 +52,7 @@ const UserMenu = () => {
     } else {
       return (
         <>
-          <Dropdown.Item onClick={() => auth.signinRedirect()}>Login</Dropdown.Item>
+          <Dropdown.Item onClick={login}>Login</Dropdown.Item>
         </>
       );
     }
@@ -55,7 +62,7 @@ const UserMenu = () => {
     <>
       <Dropdown>
         <Dropdown.Toggle id="dropdown-basic">
-          {auth.user?.profile.preferred_username}
+          {/* {auth.user?.profile.preferred_username} */}
           <PersonIcon></PersonIcon>
         </Dropdown.Toggle>
         <Dropdown.Menu className="dropdown-menu-end">
