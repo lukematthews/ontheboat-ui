@@ -8,16 +8,16 @@ import Nav from "react-bootstrap/Nav";
 import { useState } from "react";
 import Onboard from "./Onboard";
 import { BoatProfile } from "./BoatProfile";
-import { useAuth } from "react-oidc-context";
+// import { useAuth } from "react-oidc-context";
 
 const CrewHome = (props) => {
   const profile = useSelector((state) => state.user);
   const [activeTab, setActiveTab] = useState("1");
-  const auth = useAuth();
+  // const auth = useAuth();
 
-  if (!auth.isAuthenticated) {
-    return <></>;
-  }
+  // if (!auth.isAuthenticated) {
+  //   return <></>;
+  // }
 
   const displayTab = (id) => {
     return { display: activeTab !== id ? "none" : "unset" };
