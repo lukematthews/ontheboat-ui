@@ -36,6 +36,7 @@ const UserMenu = () => {
 
   const logout = async () => {
     // auth.removeUser();
+    keycloak?.logout();
   };
 
   const loggedInList = () => {

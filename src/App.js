@@ -13,11 +13,12 @@ import BoatDetailPage from "./components/BoatDetailPage";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
-import keycloak from "./keycloak";
+import keycloakInstance from "./KeycloakConfig";
+
 function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <ReactKeycloakProvider authClient={keycloak}>
+      <ReactKeycloakProvider authClient={keycloakInstance}>
         <Router>
           <div>
             <Navbar fixed="top" bg="secondary" variant="light">
