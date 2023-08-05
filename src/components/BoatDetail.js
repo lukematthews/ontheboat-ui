@@ -4,35 +4,67 @@ import Col from "react-bootstrap/Col";
 import QRCode from "react-qr-code";
 import { Button, Card, Accordion, Form } from "react-bootstrap";
 import { Paper } from "@mui/material";
-import { grey } from "@mui/material/colors";
 import Handicaps from "./Handicaps";
 import { RequestOwnershipChange } from "./RequestOwnershipChange";
 import { ModelField } from "../common/Utils";
+import ImageGallery from "react-image-gallery";
+import "react-image-gallery/styles/css/image-gallery.css";
 
 const BoatDetail = (props) => {
-
   let boatDetails = { ...(props.boat && props.boat.boatDetails) };
   if (boatDetails) {
     boatDetails.contact = props.boat.contact;
   }
+
+  const media = props.boat.boatMedia.map((boatMedia) => {
+    return { original: "/api/marina/boat-photo?id=" + boatMedia.id };
+  });
+
+  let qrCode = () => {
+    return (
+      <>
+        <div>
+          <div>
+            <QRCode
+              value={
+                process.env.REACT_APP_EXTERNAL_IP +
+                "/signOn?id=" +
+                props.boat.id
+              }
+            />
+          </div>
+          <div>
+            Use this QR code to scan it from a mobile and sign crew onto the
+            boat.
+          </div>
+          <div>
+            <a href={`/print?id=${props.boat.externalId}`}>Printable copy</a>
+          </div>
+          <div className="mt-2" style={{ width: "100%" }}>
+            <Button
+              style={{ width: "100%" }}
+              href={"/signOn?id=" + props.boat.externalId}
+            >
+              Sign On to {boatDetails.boatName}
+            </Button>
+          </div>
+        </div>
+      </>
+    );
+  };
+  media.push({ renderItem: qrCode });
+
   return (
     <>
       {boatDetails && (
         <Container>
           <Row>
             <div className="col-xs-12 col-lg-6">
-              <Paper
-                elevation={6}
-                sx={{ backgroundColor: grey[500], height: "100%" }}
-              >
-                <Card.Img
-                  variant="top"
-                  onError={(e) => (e.target.src = "")}
-                  src={
-                    props.boat.id &&
-                    "/api/marina/boat-photo?id=" + props.boat.id
-                  }
-                ></Card.Img>
+              <Paper elevation={6}>
+                <ImageGallery
+                  showPlayButton={false}
+                  items={media}
+                ></ImageGallery>
               </Paper>
             </div>
             <Col>
@@ -85,7 +117,10 @@ const BoatDetail = (props) => {
                   ></ModelField>
                 </Row>
                 <Row className="mt-0">
-                  <ContactField boatDetails={boatDetails} props={props}></ContactField>
+                  <ContactField
+                    boatDetails={boatDetails}
+                    props={props}
+                  ></ContactField>
                   <div className="py-2 col-xs-12 col-lg-6">
                     <RequestOwnershipChange
                       boatDetails={boatDetails}
@@ -160,7 +195,7 @@ const BoatDetail = (props) => {
   );
 };
 
-const ContactField = ({boatDetails, props}) => {
+const ContactField = ({ boatDetails, props }) => {
   let fieldClass = "form-control-plaintext";
   let fieldStyle = { backgroundColor: "unset", opacity: "unset" };
 
@@ -168,8 +203,16 @@ const ContactField = ({boatDetails, props}) => {
     if (!props.boat.owners) {
       return "";
     }
-    return props.boat.owners.map(owner => owner.firstName ? owner.firstName : ''+" "+owner.lastName ? owner.lastName : '').join(", ");
+    return props.boat.owners
+      .map((owner) =>
+        `${format(owner.firstName)} ${format(owner.lastName)}`.trim()
+      )
+      .join(", ");
   };
+
+  const format = (value) => {
+    return value ? value : '';
+  }
 
   return (
     <>
@@ -190,7 +233,6 @@ const ContactField = ({boatDetails, props}) => {
     </>
   );
 };
-
 
 const Bio = (props) => {
   let fieldClass = "form-control ";
