@@ -23,30 +23,16 @@ const BoatDetail = (props) => {
   let qrCode = () => {
     return (
       <>
-        <div>
+        <div style={{backgroundColor: "white"}}>
           <div>
             <QRCode
+            size={256}
               value={
                 process.env.REACT_APP_EXTERNAL_IP +
                 "/signOn?id=" +
                 props.boat.id
               }
             />
-          </div>
-          <div>
-            Use this QR code to scan it from a mobile and sign crew onto the
-            boat.
-          </div>
-          <div>
-            <a href={`/print?id=${props.boat.externalId}`}>Printable copy</a>
-          </div>
-          <div className="mt-2" style={{ width: "100%" }}>
-            <Button
-              style={{ width: "100%" }}
-              href={"/signOn?id=" + props.boat.externalId}
-            >
-              Sign On to {boatDetails.boatName}
-            </Button>
           </div>
         </div>
       </>
