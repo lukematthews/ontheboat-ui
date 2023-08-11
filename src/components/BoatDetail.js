@@ -16,17 +16,20 @@ const BoatDetail = (props) => {
     boatDetails.contact = props.boat.contact;
   }
 
-  const media = props.boat.boatMedia.map((boatMedia) => {
-    return { original: "/api/marina/boat-photo?id=" + boatMedia.id };
-  });
+  const media = [];
+  if (props.boat?.boatMedia) {
+    props.boat.boatMedia.map((boatMedia) => {
+      media.push({ original: "/api/marina/boat-photo?id=" + boatMedia.id });
+    });
+  }
 
   let qrCode = () => {
     return (
       <>
-        <div style={{backgroundColor: "white"}}>
+        <div style={{ backgroundColor: "white" }}>
           <div>
             <QRCode
-            size={256}
+              size={256}
               value={
                 process.env.REACT_APP_EXTERNAL_IP +
                 "/signOn?id=" +
@@ -197,8 +200,8 @@ const ContactField = ({ boatDetails, props }) => {
   };
 
   const format = (value) => {
-    return value ? value : '';
-  }
+    return value ? value : "";
+  };
 
   return (
     <>
