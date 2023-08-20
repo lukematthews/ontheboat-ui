@@ -6,45 +6,26 @@ import { setUser } from "../features/userSlice";
 import { useEffect, useCallback } from "react";
 import Cookies from "js-cookie";
 import { apiCall } from "../common/Utils";
-// import { useAuth } from "react-oidc-context";
-import { useKeycloak } from "@react-keycloak/web";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from "react-router-dom";
 
 const UserMenu = () => {
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.user);
-  const { keycloak } = useKeycloak();
-  // const auth = useAuth();
+  const navigate = useNavigate();
 
-  const login = useCallback(() => {
-    keycloak?.login();
-  }, [keycloak]);
-
-  useEffect(() => {
-    loadProfile();
-  }, [Cookies.get("otb")]);
-
-  const loadProfile = async () => {
-    if (!profile.isLoggedIn && Cookies.get("otb")) {
-      apiCall({
-        endpoint: "/crew/profile",
-        jwt: Cookies.get("otb"),
-        handlerCallback: (profile) =>
-          dispatch(setUser({ user: profile, isLoggedIn: true })),
-      });
-    }
-  };
-
-  const logout = async () => {
-    // auth.removeUser();
-    keycloak?.logout();
-  };
+  const {
+    user,
+    isAuthenticated,
+    loginWithRedirect,
+    logout,
+  } = useAuth0();
 
   const loggedInList = () => {
-    // if (auth.isAuthenticated) {
-    if (keycloak?.authenticated) {
+    if (isAuthenticated) {
       return (
         <>
-          {/* <Dropdown.Item href="/crew">{auth.user?.profile.preferred_username}</Dropdown.Item> */}
+          <Dropdown.Item onClick={() => navigate("/crew") }>{user.name}</Dropdown.Item>
           <p className="form-text dropdown-item">Boats</p>
           <Dropdown.Divider></Dropdown.Divider>
           <Dropdown.Item onClick={() => logout()}>Logout</Dropdown.Item>
@@ -53,7 +34,7 @@ const UserMenu = () => {
     } else {
       return (
         <>
-          <Dropdown.Item onClick={login}>Login</Dropdown.Item>
+          <Dropdown.Item onClick={() => loginWithRedirect()}>Login</Dropdown.Item>
         </>
       );
     }

@@ -10,15 +10,26 @@ import UserMenu from "./components/UserMenu";
 import CrewHome from "./components/CrewHome";
 import Onboard from "./components/Onboard";
 import BoatDetailPage from "./components/BoatDetailPage";
+import Login from "./components/Login";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { ReactKeycloakProvider } from "@react-keycloak/web";
-import keycloakInstance from "./KeycloakConfig";
+import { useAuth0 } from "@auth0/auth0-react";
+import Loading from "./components/Loading";
 
 function App() {
+
+  const { isLoading, error } = useAuth0();
+
+  if (error) {
+    return <div>Oops... {error.message}</div>;
+  }
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <ReactKeycloakProvider authClient={keycloakInstance}>
         <Router>
           <div>
             <Navbar fixed="top" bg="secondary" variant="light">
@@ -78,6 +89,7 @@ function App() {
                           path="/boat-detail"
                           element={<BoatDetailPage />}
                         ></Route>
+                        <Route path="/login" element={<Login/>}></Route>
                       </Routes>
                     </div>
                   </Col>
@@ -102,7 +114,6 @@ function App() {
             </div>
           </div>
         </Router>
-      </ReactKeycloakProvider>
     </LocalizationProvider>
   );
 }
