@@ -23,7 +23,7 @@ const providerConfig = {
   clientId: config.clientId,
   onRedirectCallback,
   authorizationParams: {
-    redirect_uri: window.location.origin + "/login",
+    redirect_uri: process.env.REACT_APP_LOGON_REDIRECT,
     ...(config.audience ? { audience: config.audience } : null),
   },
 };
