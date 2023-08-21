@@ -44,7 +44,6 @@ const UserMenu = () => {
     <>
       <Dropdown>
         <Dropdown.Toggle id="dropdown-basic">
-          {/* {auth.user?.profile.preferred_username} */}
           <PersonIcon></PersonIcon>
         </Dropdown.Toggle>
         <Dropdown.Menu className="dropdown-menu-end">

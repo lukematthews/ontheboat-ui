@@ -141,11 +141,6 @@ const SignUp = (props) => {
                         placeHolder: "Email",
                         field: "email",
                       })}
-                      {formField({
-                        label: "Username",
-                        placeHolder: "Username",
-                        field: "username",
-                      })}
                     </>
                     <div>
                       <label className="form-label">Password</label>
