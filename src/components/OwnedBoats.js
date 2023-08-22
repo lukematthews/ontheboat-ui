@@ -23,7 +23,6 @@ const OwnedBoats = (props) => {
   const profile = useSelector((state) => state.user);
   
   if (profile.isLoggedIn && profile.value.ownedBoats) {
-    // props.callback(profile.value.ownedBoats[0]);
     return <ListGroup defaultActiveKey={"#boat-"+profile.value.ownedBoats.length > 0 ? profile.value.ownedBoats[0].id : "" }>
       {profile.value.ownedBoats.map((boat) => (
         <Boat boat={boat} key={boat.id}></Boat>

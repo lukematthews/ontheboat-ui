@@ -37,7 +37,6 @@ root.render(
         <App />
       </Provider>
     </Auth0Provider>
-    ,
   </CookiesProvider>
 );
 

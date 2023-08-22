@@ -4,12 +4,15 @@ import OwnedBoats from "./OwnedBoats";
 import { useState } from "react";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
-
+import { useAuth0 } from "@auth0/auth0-react";
 export const BoatProfile = (props) => {
   const profile = useSelector((state) => state.user);
+  const {
+    isAuthenticated,
+  } = useAuth0();
 
   const [selectedBoat, setSelectedBoat] = useState(
-    profile.isLoggedIn && profile.value.ownedBoats.length > 0
+    isAuthenticated && profile.value.ownedBoats.length > 0
       ? profile.value.ownedBoats[0]
       : {}
   );

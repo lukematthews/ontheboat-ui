@@ -54,12 +54,6 @@ export const ProfileHome = (props) => {
                 placeHolder="Email"
                 field="email"
               ></FormField>
-              <FormField
-                label="Username"
-                placeHolder="Username"
-                field="username"
-                disabled
-              ></FormField>
             </Row>
             <Row className="mt-2">
               <Col>

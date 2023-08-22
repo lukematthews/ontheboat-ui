@@ -7,12 +7,15 @@ import { useSelector } from "react-redux";
 import BoatDetail from "./BoatDetail";
 import { useNavigate } from "react-router-dom";
 import { ownsBoat } from "../common/Utils";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const BoatDetailDialog = (props) => {
   const profile = useSelector((state) => state.user);
   const [show, setShow] = useState(true);
   const handleClose = () => setShow(false);
-  let loggedIn = profile.isLoggedIn;
+  const {
+    isAuthenticated,
+  } = useAuth0();
 
   let boatDetails = props.boat && props.boat.boatDetails;
 
@@ -40,7 +43,7 @@ const BoatDetailDialog = (props) => {
                   <BoatDetail boat={props.boat}></BoatDetail>
                 </Modal.Body>
                 <Modal.Footer>
-                  <EditButton loggedIn={loggedIn} boat={props.boat}></EditButton>
+                  <EditButton loggedIn={isAuthenticated} boat={props.boat}></EditButton>
                 </Modal.Footer>
               </Modal>
             </Col>
@@ -55,7 +58,6 @@ const EditButton = (props) => {
   const navigate = useNavigate();
   const profile = useSelector((state) => state.user);
 
-  // let ownedBoat = profile.value.ownedBoats.find(b => b.id === props.boat.id);
   let crewOwnsBoat = ownsBoat(profile.value, props.boat);
 
   let message = crewOwnsBoat

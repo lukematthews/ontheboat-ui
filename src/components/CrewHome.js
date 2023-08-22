@@ -44,12 +44,11 @@ const CrewHome = (props) => {
         </Row>
         <Row style={displayTab("2")}>
           <Col>
-          <BoatProfile></BoatProfile>
+            <BoatProfile></BoatProfile>
           </Col>
         </Row>
         <Row style={displayTab("1")}>
           <Col>
-            <div className="h2">My Boats</div>
             <ProfileHome></ProfileHome>
           </Col>
         </Row>

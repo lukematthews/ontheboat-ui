@@ -21,7 +21,7 @@ const Login = () => {
       await getAccessTokenSilently().then(token => {
         apiCall({endpoint: '/crew/profile', jwt: token, handlerCallback: (response)=> {
           dispatch(
-            setUser(response)
+            setUser({user: response})
           );
           console.log(response);
           navigate("/crew");

@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export const RequestOwnershipChange = (props) => {
   let boatDetails = props.boatDetails;
@@ -18,12 +19,17 @@ export const RequestOwnershipChange = (props) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const {
+    isAuthenticated,
+  } = useAuth0();
+
+
   const changeOwner = () => {
     setShow(true);
   };
 
   const RequestOwnerChangeButton = () => {
-    if (profile.isLoggedIn) {
+    if (isAuthenticated) {
       return (
         <Button onClick={() => changeOwner()}>Request Ownership Change</Button>
       );
