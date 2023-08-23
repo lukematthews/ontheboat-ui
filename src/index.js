@@ -25,6 +25,7 @@ const providerConfig = {
   authorizationParams: {
     redirect_uri: process.env.REACT_APP_LOGON_REDIRECT,
     ...(config.audience ? { audience: config.audience } : null),
+    scope: "openid profile email"
   },
 };
 

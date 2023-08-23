@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -8,10 +9,38 @@ import Nav from "react-bootstrap/Nav";
 import { useState } from "react";
 import Onboard from "./Onboard";
 import { BoatProfile } from "./BoatProfile";
+import { useAuth0 } from "@auth0/auth0-react";
+import { apiCall } from "../common/Utils";
+import { useDispatch } from "react-redux";
+import { setUser } from "../features/userSlice";
+
 
 const CrewHome = (props) => {
+  const dispatch = useDispatch();
   const profile = useSelector((state) => state.user);
   const [activeTab, setActiveTab] = useState("1");
+
+  const {
+    user,
+    isAuthenticated,
+    getAccessTokenSilently 
+  } = useAuth0();
+
+  useEffect(() => {
+    console.log(user.name);
+    const getToken = async () => {
+      await getAccessTokenSilently().then(token => {
+        apiCall({endpoint: '/crew/profile', jwt: token, handlerCallback: (response)=> {
+          dispatch(
+            setUser({user: response})
+          );
+          console.log(response);
+        }})
+      });
+    };
+    getToken();
+  }, [user]);
+
 
   const displayTab = (id) => {
     return { display: activeTab !== id ? "none" : "unset" };

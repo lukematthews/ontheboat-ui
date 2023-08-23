@@ -22,22 +22,15 @@ const UserMenu = () => {
   } = useAuth0();
 
   const loggedInList = () => {
-    if (isAuthenticated) {
-      return (
-        <>
+    return isAuthenticated ? <>
           <Dropdown.Item onClick={() => navigate("/crew") }>{user.name}</Dropdown.Item>
           <p className="form-text dropdown-item">Boats</p>
           <Dropdown.Divider></Dropdown.Divider>
-          <Dropdown.Item onClick={() => logout()}>Logout</Dropdown.Item>
-        </>
-      );
-    } else {
-      return (
+          <Dropdown.Item onClick={(e) => {e.preventDefault(); logout()}}>Logout</Dropdown.Item>
+        </> :
         <>
           <Dropdown.Item onClick={() => loginWithRedirect()}>Login</Dropdown.Item>
-        </>
-      );
-    }
+        </>;
   };
 
   return (
