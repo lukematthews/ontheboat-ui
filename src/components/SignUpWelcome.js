@@ -7,8 +7,8 @@ const SignUpWelcome = (props) => {
   const toggleShowA = () => setShowA(!showA);
   const profile = useSelector((state) => state.user);
   useEffect(() => {
-    setShowA(profile.status !== "Placeholder");
-  }, profile);
+    setShowA(profile.value.status === "Placeholder");
+  }, [profile]);
 
   return (
     <>
