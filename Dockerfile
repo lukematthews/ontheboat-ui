@@ -13,12 +13,12 @@ COPY package-lock.json /app/package-lock.json
 # Same as npm install
 RUN npm ci
 
-COPY . /app
+COPY . .
 
 ENV CI=true
-ENV PORT=3000
+ENV PORT=5173
 
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "dev" ]
 
 FROM development AS build
 
