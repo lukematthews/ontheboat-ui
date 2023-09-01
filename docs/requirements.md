@@ -1,7 +1,12 @@
-# Boat Web Business Requirements
+# On the Boat Business Requirements
 
 # Boat Register
 - All boats will be able to be searched by either the boat name, boat design, boat contact
+- Selecting a boat will display an extended view of the boats details
+- A boat can have a number of 'media' items associated with it. Photos to start with Youtube, etc. later.
+- The boats sign on QR code will be part of the media
+- There will be a link to a printable page of the QR code. This page should only have the QR code on it.
+- The boats id will be used as a static url search parameter.
 
 # Sign on.
 - A crew member can sign on to being onboard a boat with approximately 1 click.
@@ -14,13 +19,11 @@
 - A boat owner can leave a pen to participate in a race
 - A boat owner can see who are the most regular crew members
 - A boat owner can add other crew members as people able to modify the boat details
-
 - When signing on to a boat, a crew member will have a display of their eligibility to compete in races at that location. Are they a full member, do they have a sail pass?
 
 # Locations
 - A boat will be given a location
 - A location will be able to see which boats are on the water and have crew signed on.
-
 - An administrator can add locations.
 - A location will then have crew members that can administer the location
 - The location can hold races
