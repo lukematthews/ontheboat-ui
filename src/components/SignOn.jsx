@@ -3,10 +3,11 @@ import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import BoatSearch from "./BoatSearch";
 import { useSelector, useDispatch } from "react-redux";
-import { Cookies, useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { setSelectedBoat } from "../features/selectedBoatSlice";
+import { useProfile } from "../common/Profile";
 
 function SignOn() {
   let [boatId] = useSearchParams();
@@ -14,8 +15,8 @@ function SignOn() {
   const [loading, setLoading] = useState("Loading");
   const dispatch = useDispatch();
   const selectedBoat = useSelector((state) => state.selectedBoat);
-  const profile = useSelector((state) => state.user);
-  const [cookies, setCookie, removeCookie] = useCookies([
+  const profile = useProfile();
+  const [cookies] = useCookies([
     "otb",
     "lastBoatOnboard",
     "lastCrew",
@@ -42,7 +43,7 @@ function SignOn() {
   const [detailsChanged, setDetailsChanged] = useState(false);
 
   const toJson = () => {
-    let uuid = detailsChanged === true ? null : profile.value.uuid;
+    let uuid = detailsChanged === true ? null : profile.uuid;
 
     return JSON.stringify({
       firstName: firstName,
@@ -81,7 +82,7 @@ function SignOn() {
     if (cookies.lastCrew) {
       loadCrew(cookies.lastCrew);
     } else if (profile.isLoggedIn === true) {
-      loadCrew(profile.value.uuid);
+      loadCrew(profile.uuid);
     }
     if (boatIdValue && loading !== "") {
       loadBoat();
@@ -91,7 +92,7 @@ function SignOn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     let signOnRequest = toJson();
-    let res = await fetch("/api/crew/sign-on", {
+    await fetch("/api/crew/sign-on", {
       method: "POST",
       body: signOnRequest,
       headers: { "Content-Type": "application/json" },
@@ -102,7 +103,7 @@ function SignOn() {
   };
 
   const loadCrew = async (crewId) => {
-    let res = await fetch(`/api/crew/find-by-id?uuid=${crewId}`, {
+    await fetch(`/api/crew/find-by-id?uuid=${crewId}`, {
       headers: { "Content-Type": "application/json" },
     })
       .then((response) => response.json())

@@ -17,7 +17,7 @@ const Print = (props) => {
       handlerCallback: (data) => {
         setBoat(data);
         setSignOnUrl(
-          process.env.REACT_APP_EXTERNAL_IP + "/signOn?id=" + boatIdValue
+          import.meta.env.VITE_EXTERNAL_IP + "/signOn?id=" + boatIdValue
         );
       },
     });

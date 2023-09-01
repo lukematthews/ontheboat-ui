@@ -5,17 +5,18 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { ownsBoat, apiCall } from "../common/Utils";
+import { useProfile } from "../common/Profile";
 
 const BoatDetailPage = (props) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const boatId = searchParams.get("boatId");
   const selectedBoat = useSelector((state) => state.boatRegisterSelectedBoat);
-  const profile = useSelector((state) => state.user);
+  const profile = useProfile();
   const [boat, setBoat] = useState({});
   const navigate = useNavigate();
 
   const fetchBoat = async (boatId) => {
-    apiCall({
+    await apiCall({
       endpoint: "/marina/boat-details",
       query: {boatId: boatId},
       handlerCallback: (boat) => {setBoat(boat)},
@@ -44,7 +45,7 @@ const BoatDetailPage = (props) => {
       </Modal.Header>
       <BoatDetail
         boat={boat}
-        editable={ownsBoat(profile?.value, boat)}
+        editable={ownsBoat(profile, boat)}
       ></BoatDetail>
     </>
   );

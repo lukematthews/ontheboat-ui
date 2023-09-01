@@ -2,7 +2,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import QRCode from "react-qr-code";
-import { Button, Card, Accordion, Form } from "react-bootstrap";
+import { Button, Accordion, Form } from "react-bootstrap";
 import { Paper } from "@mui/material";
 import Handicaps from "./Handicaps";
 import { RequestOwnershipChange } from "./RequestOwnershipChange";
@@ -31,7 +31,7 @@ const BoatDetail = (props) => {
             <QRCode
               size={256}
               value={
-                process.env.REACT_APP_EXTERNAL_IP +
+                import.meta.env.VITE_EXTERNAL_IP +
                 "/signOn?id=" +
                 props.boat.id
               }
@@ -129,7 +129,7 @@ const BoatDetail = (props) => {
                               <Col>
                                 <QRCode
                                   value={
-                                    process.env.REACT_APP_EXTERNAL_IP +
+                                    import.meta.env.VITE_EXTERNAL_IP +
                                     "/signOn?id=" +
                                     props.boat.id
                                   }

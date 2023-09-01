@@ -72,8 +72,7 @@ function App() {
             >
               <Container>
                 <Row
-                  className="py-2"
-                  style={{ background: "rgba(255,255,255,0.95)" }}
+                  style={{ background: "rgba(255,255,255,0.95)", paddingTop: "65px" }}
                 >
                   <Col>
                     <div className="App">

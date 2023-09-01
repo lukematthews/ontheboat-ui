@@ -1,7 +1,8 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../style/OwnedBoats.css";
 import { ListGroup } from "react-bootstrap";
+import { useProfile } from "../common/Profile";
 
 const Boat = (props) => {
   const navigate = useNavigate();
@@ -20,11 +21,11 @@ const Boat = (props) => {
 };
 
 const OwnedBoats = (props) => {
-  const profile = useSelector((state) => state.user);
+  const profile = useProfile();
   
-  if (profile.isLoggedIn && profile.value.ownedBoats) {
-    return <ListGroup defaultActiveKey={"#boat-"+profile.value.ownedBoats.length > 0 ? profile.value.ownedBoats[0].id : "" }>
-      {profile.value.ownedBoats.map((boat) => (
+  if (profile.isLoggedIn && profile.ownedBoats) {
+    return <ListGroup defaultActiveKey={"#boat-"+profile.ownedBoats.length > 0 ? profile.ownedBoats[0].id : "" }>
+      {profile.ownedBoats.map((boat) => (
         <Boat boat={boat} key={boat.id}></Boat>
       ))}
     </ListGroup>;

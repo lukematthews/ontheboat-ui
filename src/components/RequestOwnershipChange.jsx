@@ -7,25 +7,26 @@ import {
   Form,
 } from "react-bootstrap";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import Cookies from "js-cookie";
 import { useAuth0 } from "@auth0/auth0-react";
+import { apiCall } from "../common/Utils";
+import { useProfile } from "../common/Profile";
 
 export const RequestOwnershipChange = (props) => {
   let boatDetails = props.boatDetails;
-  const profile = useSelector((state) => state.user);
   const [requestType, setRequestType] = useState("sole");
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const [show, setShowRequestOwnerChangeDialog] = useState(false);
+  const handleClose = () => setShowRequestOwnerChangeDialog(false);
+  const handleShow = () => setShowRequestOwnerChangeDialog(true);
+  const profile = useProfile();
 
   const {
     isAuthenticated,
+    getAccessTokenSilently
   } = useAuth0();
 
 
   const changeOwner = () => {
-    setShow(true);
+    setShowRequestOwnerChangeDialog(true);
   };
 
   const RequestOwnerChangeButton = () => {
@@ -40,25 +41,23 @@ export const RequestOwnershipChange = (props) => {
 
   const postOwnershipChange = async (e) => {
     e.preventDefault();
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + Cookies.get("otb"),
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        boatId: props.id,
-        crewId: profile.value.id,
-        requestType: requestType,
-      }),
-    };
 
-    await fetch("/api/crew/request-ownership-change", requestOptions)
-      .then((response) => response.text())
-      .then((data) => () => {
-        setShow(false);
-      });
-    setShow(false);
+    let token = await getAccessTokenSilently();
+    apiCall({
+      endpoint: "/crew/request-ownership-change",
+      method: "POST",
+      jwt: token,
+      body: {
+        boatId: props.boatDetails.id,
+        crewId: profile.id,
+        requestType: requestType,
+      },
+      handlerCallback: (response) => {
+        setShowRequestOwnerChangeDialog(false);
+        console.log(response);
+      },
+    });
+    setShowRequestOwnerChangeDialog(false);
   };
 
   return (
