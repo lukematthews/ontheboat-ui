@@ -1,17 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { useSelector } from "react-redux";
 import OwnedBoats from "./OwnedBoats";
 import { ProfileHome } from "./ProfileHome";
 import Nav from "react-bootstrap/Nav";
 import { useState } from "react";
 import Onboard from "./Onboard";
 import { BoatProfile } from "./BoatProfile";
-import { useAuth0 } from "@auth0/auth0-react";
-import { apiCall } from "../common/Utils";
-import { useDispatch } from "react-redux";
 import SignUpWelcome from "./SignUpWelcome";
 import { useProfile } from "../common/Profile";
 

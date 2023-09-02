@@ -8,7 +8,6 @@ import { useProfile } from "../common/Profile";
 export const ProfileHome = (props) => {
   const profile = useProfile();
   const editableProfile = Object.assign({}, profile);
-  const dispatch = useDispatch();
   const { getAccessTokenSilently } = useAuth0();
 
   const onSubmit = (e) => {
@@ -20,7 +19,6 @@ export const ProfileHome = (props) => {
           jwt: token,
           method: "PUT",
           handlerCallback: (response) => {
-            dispatch(setUser({ user: response }));
             console.log(response);
           },
         });

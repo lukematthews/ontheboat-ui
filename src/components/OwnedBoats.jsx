@@ -30,7 +30,6 @@ const OwnedBoats = (props) => {
       ))}
     </ListGroup>;
   } else {
-    console.log("nothing to see here.");
     return <></>;
   }
 };

@@ -1,6 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { apiCall } from "./Utils";
-import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 
 export function useProfile() {
@@ -16,7 +15,6 @@ export function useProfile() {
             jwt: token,
             handlerCallback: (response) => {
               setProfile(response);
-              console.log(response);
             },
           });
         });
