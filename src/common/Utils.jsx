@@ -82,7 +82,7 @@ export const ModelField = ({ model, name, field, editable }) => {
 export const formField = (props) => {
   return (
     <div>
-      <label className="form-label">{props.label}</label>
+      <label className="form-label" for={props.field}>{props.label}</label>
       <Field
         component="input"
         name={props.field}
@@ -98,8 +98,9 @@ export const formField = (props) => {
 export const FormField = (props) => {
   return (
     <div>
-      <label className="form-label">{props.label}</label>
+      <label className="form-label" for={"form-input."+props.field}>{props.label}</label>
       <Field
+        id={"form-input."+props.field}
         component="input"
         name={props.field}
         autoComplete={props.autoComplete}

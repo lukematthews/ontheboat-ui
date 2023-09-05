@@ -21,7 +21,7 @@ const UserMenu = () => {
           <Dropdown.Item onClick={(e) => {e.preventDefault(); logout()}}>Logout</Dropdown.Item>
         </> :
         <>
-          <Dropdown.Item onClick={() => loginWithRedirect()}>Login</Dropdown.Item>
+          <Dropdown.Item onClick={() => loginWithRedirect({}).then(() => navigate("/crew"))}>Login</Dropdown.Item>
         </>;
   };
 

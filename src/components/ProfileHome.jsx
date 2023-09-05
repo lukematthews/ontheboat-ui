@@ -1,14 +1,13 @@
 import { Button, Col, Container, Row } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { apiCall, FormField } from "../common/Utils";
 import { Form } from "react-final-form";
-import { setUser } from "../features/userSlice";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useProfile } from "../common/Profile";
 
 export const ProfileHome = (props) => {
-  const profile = useSelector((state) => state.user);
-  const editableProfile = Object.assign({}, profile.value);
-  const dispatch = useDispatch();
+  const profile = useProfile();
+  const editableProfile = Object.assign({}, profile);
   const { getAccessTokenSilently } = useAuth0();
 
   const onSubmit = (e) => {
@@ -20,7 +19,6 @@ export const ProfileHome = (props) => {
           jwt: token,
           method: "PUT",
           handlerCallback: (response) => {
-            dispatch(setUser({ user: response }));
             console.log(response);
           },
         });

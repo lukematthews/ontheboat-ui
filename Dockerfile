@@ -13,17 +13,16 @@ COPY package-lock.json /app/package-lock.json
 # Same as npm install
 RUN npm ci
 
-COPY . /app
+COPY . .
 
 ENV CI=true
-ENV PORT=3000
+ENV PORT=5173
 
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "dev" ]
 
 FROM development AS build
 
-RUN npm run build:production
-
+RUN npm run build
 
 FROM development as dev-envs
 RUN <<EOF
@@ -52,7 +51,8 @@ WORKDIR /usr/share/nginx/html
 RUN rm -rf ./*
 
 # Copy static assets from builder stage
-COPY --from=build /app/build .
+COPY --from=build /app/dist .
+COPY .nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Containers run nginx with global directives and daemon off
 ENTRYPOINT ["nginx", "-g", "daemon off;"]

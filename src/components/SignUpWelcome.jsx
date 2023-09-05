@@ -1,13 +1,14 @@
 import { Toast, ToastHeader, ToastBody } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useProfile } from "../common/Profile";
 
 const SignUpWelcome = (props) => {
   const [showA, setShowA] = useState(true);
   const toggleShowA = () => setShowA(!showA);
-  const profile = useSelector((state) => state.user);
+  const profile = useProfile();
+
   useEffect(() => {
-    setShowA(profile.value.status === "Placeholder");
+    setShowA(profile.status === "Placeholder");
   }, [profile]);
 
   return (

@@ -31,7 +31,7 @@ const BoatDetail = (props) => {
             <QRCode
               size={256}
               value={
-                process.env.REACT_APP_EXTERNAL_IP +
+                import.meta.env.VITE_EXTERNAL_IP +
                 "/signOn?id=" +
                 props.boat.id
               }
@@ -129,7 +129,7 @@ const BoatDetail = (props) => {
                               <Col>
                                 <QRCode
                                   value={
-                                    process.env.REACT_APP_EXTERNAL_IP +
+                                    import.meta.env.VITE_EXTERNAL_IP +
                                     "/signOn?id=" +
                                     props.boat.id
                                   }

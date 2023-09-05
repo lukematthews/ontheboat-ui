@@ -1,7 +1,7 @@
 export function getConfig() {
   return {
-    domain: process.env.REACT_APP_AUTH_DOMAIN,
-    clientId: process.env.REACT_APP_AUTH_CLIENT_ID,
-    audience: process.env.REACT_APP_AUTH_AUDIENCE,
+    domain: import.meta.env.VITE_AUTH_DOMAIN,
+    clientId: import.meta.env.VITE_AUTH_CLIENT_ID,
+    audience: import.meta.env.VITE_AUTH_AUDIENCE,
   };
 }
