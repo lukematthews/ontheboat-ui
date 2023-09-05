@@ -1,18 +1,15 @@
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { apiCall, formField, FormField } from "../common/Utils";
+import { apiCall, FormField } from "../common/Utils";
 import { Form } from "react-final-form";
-import { Cookies, useCookies } from "react-cookie";
-import { useFetch } from "../common/Utils";
 import { setUser } from "../features/userSlice";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export const ProfileHome = (props) => {
   const profile = useSelector((state) => state.user);
-  const [cookies, setCookie, removeCookie] = useCookies(["otb"]);
   const editableProfile = Object.assign({}, profile.value);
   const dispatch = useDispatch();
-  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
 
   const onSubmit = (e) => {
     const getToken = async () => {

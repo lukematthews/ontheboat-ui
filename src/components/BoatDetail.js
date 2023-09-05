@@ -2,7 +2,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import QRCode from "react-qr-code";
-import { Button, Card, Accordion, Form } from "react-bootstrap";
+import { Button, Accordion, Form } from "react-bootstrap";
 import { Paper } from "@mui/material";
 import Handicaps from "./Handicaps";
 import { RequestOwnershipChange } from "./RequestOwnershipChange";

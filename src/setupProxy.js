@@ -8,12 +8,4 @@ module.exports = function(app) {
       changeOrigin: true,
     })
   );
-
-  app.use(
-    '/auth',
-    createProxyMiddleware({
-      target: process.env.REACT_APP_KEYCLOAK,
-      changeOrigin: true,
-    })
-  );
 };

@@ -1,17 +1,9 @@
 import { Dropdown } from "react-bootstrap";
 import PersonIcon from "@mui/icons-material/Person";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { setUser } from "../features/userSlice";
-import { useEffect, useCallback } from "react";
-import Cookies from "js-cookie";
-import { apiCall } from "../common/Utils";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
 
 const UserMenu = () => {
-  const dispatch = useDispatch();
-  const profile = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const {

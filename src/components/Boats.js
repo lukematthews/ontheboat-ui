@@ -59,7 +59,7 @@ const Boats = () => {
 
   const selectionChanged = (boat) => {
     dispatch(
-      setSelectedBoatRegister({ ...page.content.find((row) => row.id == boat) })
+      setSelectedBoatRegister({ ...page.content.find((row) => row.id === boat) })
     );
   };
 
