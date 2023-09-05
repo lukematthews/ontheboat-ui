@@ -1,6 +1,9 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 
 const Home = (props) => {
+  const { loginWithRedirect } = useAuth0();
+
   return (
     <>
       <Container>
@@ -24,7 +27,7 @@ const Home = (props) => {
               the owner of a boat.
             </p>
             <p>
-              <Button href="/signUp">Get me onboard!</Button>
+              <Button onClick={() => loginWithRedirect({authorizationParams: {screen_hint: 'signup', mode: 'signUp'}})}>Get me onboard!</Button>
             </p>
             <p>
               As a boat owner, you can update your boat details and manage which

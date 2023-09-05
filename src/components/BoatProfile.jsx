@@ -1,6 +1,7 @@
 import { Container, Row, Col } from "react-bootstrap";
 import Onboard from "./Onboard";
 import OwnedBoats from "./OwnedBoats";
+import OwnerShipChangeRequests from "./OwnershipChangeRequests";
 import { useState } from "react";
 import dayjs from "dayjs";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -26,6 +27,8 @@ export const BoatProfile = (props) => {
           <Col>
             <div className="h2">My Boats</div>
             <OwnedBoats callback={setSelectedBoat}></OwnedBoats>
+            <div className="h2">Ownership change requests</div>
+            <OwnerShipChangeRequests></OwnerShipChangeRequests>
             <div className="h2">Onboard today</div>
             <Onboard
               boatId={selectedBoat.id}

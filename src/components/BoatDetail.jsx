@@ -69,12 +69,14 @@ const BoatDetail = (props) => {
                     field="design"
                     model={boatDetails}
                     props={props}
+                    editable={props.editable}
                   ></ModelField>
                   <ModelField
                     name="Colour"
                     field="hullColour"
                     model={boatDetails}
                     props={props}
+                    editable={props.editable}
                   ></ModelField>
                 </Row>
                 <Row className="mt-0">
@@ -83,12 +85,14 @@ const BoatDetail = (props) => {
                     field="hullMaterial"
                     model={boatDetails}
                     props={props}
+                    editable={props.editable}
                   ></ModelField>
                   <ModelField
                     name="Length"
                     field="lengthOverall"
                     model={boatDetails}
                     props={props}
+                    editable={props.editable}
                   ></ModelField>
                 </Row>
                 <Row className="mt-0">
@@ -97,12 +101,14 @@ const BoatDetail = (props) => {
                     field="rig"
                     model={boatDetails}
                     props={props}
+                    editable={props.editable}
                   ></ModelField>
                   <ModelField
                     name="Launch Year"
                     field="launchYear"
                     model={boatDetails}
                     props={props}
+                    editable={props.editable}
                   ></ModelField>
                 </Row>
                 <Row className="mt-0">
@@ -112,7 +118,7 @@ const BoatDetail = (props) => {
                   ></ContactField>
                   <div className="py-2 col-xs-12 col-lg-6">
                     <RequestOwnershipChange
-                      boatDetails={boatDetails}
+                      boatDetails={props.boat}
                     ></RequestOwnershipChange>
                   </div>
                 </Row>

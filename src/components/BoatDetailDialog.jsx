@@ -7,7 +7,7 @@ import BoatDetail from "./BoatDetail";
 import { useNavigate } from "react-router-dom";
 import { ownsBoat } from "../common/Utils";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useProfile } from "../common/Profile";
+import { useSelector } from "react-redux";
 
 const BoatDetailDialog = (props) => {
   const [show, setShow] = useState(true);
@@ -55,9 +55,9 @@ const BoatDetailDialog = (props) => {
 
 const EditButton = (props) => {
   const navigate = useNavigate();
-  const profile = useProfile();
+  const profile = useSelector((state) => state.profile);
 
-  let crewOwnsBoat = ownsBoat(profile, props.boat);
+  let crewOwnsBoat = ownsBoat(profile.value, props.boat);
 
   let message = crewOwnsBoat
     ? "Edit the details of this boat"

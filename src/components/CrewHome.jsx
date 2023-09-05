@@ -10,10 +10,13 @@ import Onboard from "./Onboard";
 import { BoatProfile } from "./BoatProfile";
 import SignUpWelcome from "./SignUpWelcome";
 import { useProfile } from "../common/Profile";
+import { useSelector } from "react-redux";
+import { Admin } from "./Admin";
 
 const CrewHome = (props) => {
+  const loadedProfile = useProfile();
   const [activeTab, setActiveTab] = useState("1");
-  const profile = useProfile();
+  const reduxProfile = useSelector((state) => state.profile);
   const displayTab = (id) => {
     return { display: activeTab !== id ? "none" : "unset" };
   };
@@ -36,13 +39,16 @@ const CrewHome = (props) => {
               }}
             >
               <div className="h1" style={{ paddingRight: "30px" }}>
-                {profile.firstName}
+                {reduxProfile.value.firstName}
               </div>
               <Nav.Item>
                 <Nav.Link eventKey="1">Profile</Nav.Link>
               </Nav.Item>
               <Nav.Item>
                 <Nav.Link eventKey="2">Boats</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="3">Admin</Nav.Link>
               </Nav.Item>
               <Nav.Item></Nav.Item>
             </Nav>
@@ -56,6 +62,11 @@ const CrewHome = (props) => {
         <Row style={displayTab("1")}>
           <Col>
             <ProfileHome></ProfileHome>
+          </Col>
+        </Row>
+        <Row style={displayTab("3")}>
+          <Col>
+            <Admin></Admin>
           </Col>
         </Row>
       </Container>

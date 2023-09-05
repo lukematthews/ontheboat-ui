@@ -1,5 +1,75 @@
 import { Form } from "react-bootstrap";
 import { Field } from "react-final-form";
+import { useAuth0 } from "@auth0/auth0-react";
+
+export const apiCallAuth = async (
+  {
+    endpoint,
+    query,
+    body,
+    handlerCallback = (response) => {},
+    method = "GET",
+  } = { endpoint, query, body, handlerCallback, method }
+) => {
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+  if (isAuthenticated) {
+    const getToken = async () => {
+      await getAccessTokenSilently().then((token) => {
+        apiCall({
+          endpoint: endpoint,
+          query: query,
+          body: body,
+          method: method,
+          jwt: token,
+          handlerCallback: handlerCallback
+        });
+      });
+    };
+    getToken();
+  }
+};
+
+export const apiCallPromise = async (
+  {
+    endpoint,
+    query,
+    body,
+    handlerCallback = (response) => {},
+    jwt,
+    method = "GET",
+  } = { endpoint, query, body, handlerCallback, jwt, method }
+) => {
+  const requestOptions = {
+    method: method,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + jwt,
+    },
+    body: JSON.stringify(body),
+  };
+  if (query) {
+    endpoint = endpoint + "?" + new URLSearchParams(query).toString();
+  }
+  if (method === "GET") {
+    delete requestOptions.body;
+  }
+  if (!jwt) {
+    delete requestOptions.headers.Authorization;
+  }
+  try {
+    return fetch("/api" + endpoint, requestOptions)
+      .then((response) => {
+        if (response.status !== 200) {
+          throw new Error(`received satus ${response.status}`);
+        }
+        return response;
+      })
+      .then((response) => response.json());
+  } catch (error) {
+    console.log(error);
+  }
+  return Promise.resolve();
+};
 
 export const apiCall = async (
   {
@@ -98,7 +168,7 @@ export const formField = (props) => {
 export const FormField = (props) => {
   return (
     <div>
-      <label className="form-label" for={"form-input."+props.field}>{props.label}</label>
+      <label className="form-label" htmlFor={"form-input."+props.field}>{props.label}</label>
       <Field
         id={"form-input."+props.field}
         component="input"

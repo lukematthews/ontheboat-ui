@@ -11,7 +11,7 @@ const BoatDetailPage = (props) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const boatId = searchParams.get("boatId");
   const selectedBoat = useSelector((state) => state.boatRegisterSelectedBoat);
-  const profile = useProfile();
+  const profile = useSelector((state) => state.profile);
   const [boat, setBoat] = useState({});
   const navigate = useNavigate();
 
@@ -45,7 +45,7 @@ const BoatDetailPage = (props) => {
       </Modal.Header>
       <BoatDetail
         boat={boat}
-        editable={ownsBoat(profile, boat)}
+        editable={ownsBoat(profile.value, boat)}
       ></BoatDetail>
     </>
   );
