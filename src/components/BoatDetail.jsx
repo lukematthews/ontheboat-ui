@@ -181,6 +181,13 @@ const BoatDetail = (props) => {
                     </Accordion>
                   </Col>
                 </Row>
+                {props.editable ?
+                <Row>
+                  <Col className="d-flex">
+                  <div style={{flex: 'auto'}}></div>
+                  <div><Button>Save</Button> <Button>Cancel</Button></div>
+                  </Col>
+                </Row> : <></>}
               </Container>
             </Col>
           </Row>

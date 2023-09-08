@@ -68,15 +68,23 @@ export const Request = (props) => {
           .then(response => console.log("success"));
       });
   };
-  
+  let approvedEnabled = props.request.status === "APPROVED" ?
+  {
+    colour: "secondary",
+    enabled: true
+  } :
+  {
+    colour: "success",
+    enabled: false
+  }
   return (
     <>
     <ListItem className="list-group-item d-flex">
       <div style={{flex: 'auto'}}>{props.request.submitted+" "+props.request.boatName}</div>      
       <div><span  style={{marginRight: '5px'}} className="badge bg-primary rounded-pill">{props.request.status}</span></div>
       <div>
-        <Button style={{marginRight: '5px'}} className="bg-success" onClick={approveRequestAction}><ThumbUpIcon/></Button>
-        <Button style={{marginRight: '5px'}} className="bg-danger"><ThumbDownIcon/></Button>
+        <Button style={{marginRight: '5px'}} variant={approvedEnabled.colour } onClick={approveRequestAction} disabled={approvedEnabled.enabled}><ThumbUpIcon/></Button>
+        <Button style={{marginRight: '5px'}} variant="danger" ><ThumbDownIcon/></Button>
         <Button><CancelIcon/></Button>
       </div>
     </ListItem>

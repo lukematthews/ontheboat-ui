@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { ownsBoat, apiCall } from "../common/Utils";
-import { useProfile } from "../common/Profile";
 
 const BoatDetailPage = (props) => {
   const [searchParams, setSearchParams] = useSearchParams();
