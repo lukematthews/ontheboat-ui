@@ -36,7 +36,7 @@ const OwnedBoats = (props) => {
               <Container>
                 <Row bsPrefix="row justify-content-end">
                   <Col bsPrefix="col">
-                    <span>{boat.boatName}</span>
+                    <a href={"/boat-detail?boatId="+boat.externalId}>{boat.boatName}</a>
                   </Col>
                 </Row>
               </Container>
