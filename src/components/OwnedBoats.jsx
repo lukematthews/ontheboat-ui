@@ -31,7 +31,7 @@ const OwnedBoats = (props) => {
         }
       >
         {profile.value.ownedBoats.map((boat) => (
-          <Card>
+          <Card key={boat.id}>
             <Card.Body>
               <Container>
                 <Row bsPrefix="row justify-content-end">

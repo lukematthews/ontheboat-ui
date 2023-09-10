@@ -149,35 +149,35 @@ export const ModelField = ({ model, name, field, editable }) => {
   );
 };
 
-export const formField = (props) => {
+export const formField = ({field, label, autoComplete, placeHolder}) => {
   return (
     <div>
-      <label className="form-label" for={props.field}>{props.label}</label>
+      <label className="form-label" for={field}>{label}</label>
       <Field
         component="input"
-        name={props.field}
-        autoComplete={props.autoComplete}
+        name={field}
+        autoComplete={autoComplete}
         type="text"
-        placeholder={props.placeHolder}
+        placeholder={placeHolder}
         className="form-control"
       />
     </div>
   );
 };
 
-export const FormField = (props) => {
+export const FormField = ({field, label, autoComplete, placeHolder, disabled}) => {
   return (
     <div>
-      <label className="form-label" htmlFor={"form-input."+props.field}>{props.label}</label>
+      <label className="form-label fw-bold" htmlFor={"form-input."+field}>{label}</label>
       <Field
-        id={"form-input."+props.field}
+        id={"form-input."+field}
         component="input"
-        name={props.field}
-        autoComplete={props.autoComplete}
+        name={field}
+        autoComplete={autoComplete}
         type="text"
-        placeholder={props.placeHolder}
+        placeholder={placeHolder}
         className="form-control"
-        disabled={props.disabled ? true : false}
+        disabled={disabled ? true : false}
       />
     </div>
   );

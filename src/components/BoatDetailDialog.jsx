@@ -8,13 +8,12 @@ import { useNavigate } from "react-router-dom";
 import { ownsBoat } from "../common/Utils";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useSelector } from "react-redux";
+import { Form } from "react-final-form";
 
 const BoatDetailDialog = (props) => {
   const [show, setShow] = useState(true);
   const handleClose = () => setShow(false);
-  const {
-    isAuthenticated,
-  } = useAuth0();
+  const { isAuthenticated } = useAuth0();
 
   let boatDetails = props.boat && props.boat.boatDetails;
 
@@ -22,6 +21,22 @@ const BoatDetailDialog = (props) => {
     setShow(true);
   }, [props.boat]);
 
+  const saveBoat = async () => {
+    const getToken = async () => {
+      await getAccessTokenSilently().then((token) => {
+        apiCall({
+          endpoint: "/boat/update-boat-details",
+          body: boatDetails,
+          jwt: token,
+          method: "PUT",
+          handlerCallback: (response) => {
+            console.log("saved successfully");
+          },
+        });
+      });
+    };
+    getToken();
+  };
 
   return (
     <>
@@ -30,19 +45,12 @@ const BoatDetailDialog = (props) => {
           <Row>
             <Col>
               <Modal show={show} onHide={handleClose} size="xl">
-                <Modal.Header closeButton>
-                  <Modal.Title className="w-100">
-                    <p style={{ textAlign: "center" }}>
-                      <span className="h1">{boatDetails.boatName}</span>{" "}
-                      <span className="h3">{props.boat.sailNumber}</span>
-                    </p>
-                  </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <BoatDetail boat={props.boat}></BoatDetail>
-                </Modal.Body>
+                <BoatDetail boat={props.boat} save={saveBoat} dialogMode={true}></BoatDetail>
                 <Modal.Footer>
-                  <EditButton loggedIn={isAuthenticated} boat={props.boat}></EditButton>
+                  <EditButton
+                    loggedIn={isAuthenticated}
+                    boat={props.boat}
+                  ></EditButton>
                 </Modal.Footer>
               </Modal>
             </Col>
@@ -72,7 +80,7 @@ const EditButton = (props) => {
           disabled={!crewOwnsBoat}
           style={style}
           onClick={() => {
-            navigate("/boat-detail");
+            navigate("/boat-detail?boatId=" + props.boat.externalId);
           }}
         >
           Edit
