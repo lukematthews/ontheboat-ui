@@ -68,13 +68,15 @@ export const Request = (props) => {
           .then(response => console.log("success"));
       });
   };
-  let approvedEnabled = props.request.status === "APPROVED" ?
+  let approvedEnabled = props.request.status === "APPROVED" || props.request.status === "REJECTED" ?
   {
     colour: "secondary",
+    rejectColour: "secondary",
     enabled: true
   } :
   {
     colour: "success",
+    rejectColour: "danger",
     enabled: false
   }
   return (
@@ -84,7 +86,7 @@ export const Request = (props) => {
       <div><span  style={{marginRight: '5px'}} className="badge bg-primary rounded-pill">{props.request.status}</span></div>
       <div>
         <Button style={{marginRight: '5px'}} variant={approvedEnabled.colour } onClick={approveRequestAction} disabled={approvedEnabled.enabled}><ThumbUpIcon/></Button>
-        <Button style={{marginRight: '5px'}} variant="danger" ><ThumbDownIcon/></Button>
+        <Button style={{marginRight: '5px'}} variant={approvedEnabled.rejectColour}  disabled={approvedEnabled.enabled}><ThumbDownIcon/></Button>
         <Button><CancelIcon/></Button>
       </div>
     </ListItem>

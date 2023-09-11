@@ -46,12 +46,6 @@ const BoatDetailDialog = (props) => {
             <Col>
               <Modal show={show} onHide={handleClose} size="xl">
                 <BoatDetail boat={props.boat} save={saveBoat} dialogMode={true}></BoatDetail>
-                <Modal.Footer>
-                  <EditButton
-                    loggedIn={isAuthenticated}
-                    boat={props.boat}
-                  ></EditButton>
-                </Modal.Footer>
               </Modal>
             </Col>
           </Row>

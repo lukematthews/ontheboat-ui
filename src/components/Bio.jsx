@@ -18,6 +18,7 @@ const Bio = ({ details, editable }) => {
         disabled={!editable}
         style={style}
         name="bio"
+        placeholder="No bio information at this time."
       ></Field>
     </>
   );

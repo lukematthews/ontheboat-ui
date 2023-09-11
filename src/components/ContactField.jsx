@@ -23,10 +23,10 @@ const ContactField = ({ boat }) => {
 
   return (
     <>
-      <div className="col-xs-12 col-lg-3 my-1">
+      <div className="my-1">
         <label className="fw-bold">Owners</label>
       </div>
-      <div className="col-xs-12 col-lg-3 my-1">
+      <div className="my-1">
         <input type="text" className={fieldClass} style={fieldStyle} disabled value={renderOwnerNames(boat)}></input>
       </div>
     </>

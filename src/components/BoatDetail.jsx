@@ -15,10 +15,12 @@ import ContactField from "./ContactField";
 import Bio from "./Bio";
 import { ownsBoat, apiCall } from "../common/Utils";
 import { useSelector } from "react-redux";
+import { useState } from "react";
+import EditButton from "./EditButton";
 
 const BoatDetail = ({ boat, editable, save, dialogMode }) => {
   const profile = useSelector((state) => state.profile);
-
+  const [editMode, setEditMode] = useState(false);
   let boatDetails = { ...(boat && boat.boatDetails) };
   if (Object.keys(boat).length > 0) {
     boatDetails.id = boat.id;
@@ -88,7 +90,10 @@ const BoatDetail = ({ boat, editable, save, dialogMode }) => {
                   <Container>
                     <Row>
                       <Col>
-                        <Bio details={boatDetails} editable={editable} />
+                        <Bio
+                          details={boatDetails}
+                          editable={editMode && editable}
+                        />
                       </Col>
                     </Row>
                     <Row>
@@ -96,13 +101,13 @@ const BoatDetail = ({ boat, editable, save, dialogMode }) => {
                         label="Design"
                         field="design"
                         model={boatDetails}
-                        editable={editable}
+                        disabled={!(editMode && editable)}
                       ></FormField>
                       <FormField
                         label="Colour"
                         field="hullColour"
                         model={boatDetails}
-                        editable={editable}
+                        disabled={!(editMode && editable)}
                       ></FormField>
                     </Row>
                     <Row className="mt-0">
@@ -110,13 +115,13 @@ const BoatDetail = ({ boat, editable, save, dialogMode }) => {
                         label="Hull Material"
                         field="hullMaterial"
                         model={boatDetails}
-                        editable={editable}
+                        disabled={!(editMode && editable)}
                       ></FormField>
                       <FormField
                         label="Length"
                         field="lengthOverall"
                         model={boatDetails}
-                        editable={editable}
+                        disabled={!(editMode && editable)}
                       ></FormField>
                     </Row>
                     <Row className="mt-0">
@@ -124,13 +129,13 @@ const BoatDetail = ({ boat, editable, save, dialogMode }) => {
                         label="Rig"
                         field="rig"
                         model={boatDetails}
-                        editable={editable}
+                        disabled={!(editMode && editable)}
                       ></FormField>
                       <FormField
                         label="Launch Year"
                         field="launchYear"
                         model={boatDetails}
-                        editable={editable}
+                        disabled={!(editMode && editable)}
                       ></FormField>
                     </Row>
                     <Row className="mt-0">
@@ -207,18 +212,22 @@ const BoatDetail = ({ boat, editable, save, dialogMode }) => {
             </Container>
           </Modal.Body>
           <Modal.Footer>
-            {ownsBoat(profile.value, boat) ? (
+            {editMode && editable ? ( //ownsBoat(profile.value, boat) ? (
               <Row>
                 <Col className="d-flex">
                   <div style={{ flex: "auto" }}></div>
                   <div>
-                    <Button type="submit">Save</Button>{" "}
-                    <Button>Cancel</Button>
+                    <Button type="submit">Save</Button> <Button onClick={() => setEditMode(false)}>Cancel</Button>
                   </div>
                 </Col>
               </Row>
             ) : (
-              <></>
+              <>
+                <EditButton
+                  boat={boat}
+                  editModeCallback={setEditMode}
+                ></EditButton>
+              </>
             )}
           </Modal.Footer>
         </form>

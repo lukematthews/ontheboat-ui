@@ -176,7 +176,7 @@ export const FormField = ({field, label, autoComplete, placeHolder, disabled}) =
         autoComplete={autoComplete}
         type="text"
         placeholder={placeHolder}
-        className="form-control"
+        className={disabled ? "form-control-plaintext": "form-control"}
         disabled={disabled ? true : false}
       />
     </div>
