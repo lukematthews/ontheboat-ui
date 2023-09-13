@@ -25,7 +25,7 @@ const providerConfig = {
   authorizationParams: {
     redirect_uri: import.meta.env.VITE_LOGON_REDIRECT,
     ...(config.audience ? { audience: config.audience } : null),
-    scope: "openid profile email"
+    scope: "openid profile email",
   },
 };
 
