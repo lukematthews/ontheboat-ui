@@ -8,6 +8,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { setSelectedBoat } from "../features/selectedBoatSlice";
 import { useProfile } from "../common/Profile";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function SignOn() {
   let [boatId] = useSearchParams();
@@ -15,7 +16,9 @@ function SignOn() {
   const [loading, setLoading] = useState("Loading");
   const dispatch = useDispatch();
   const selectedBoat = useSelector((state) => state.selectedBoat);
-  const profile = useProfile();
+  const profile = useSelector((state) => state.profile);
+  const {isAuthenticated} = useAuth0();
+
   const [cookies] = useCookies([
     "otb",
     "lastBoatOnboard",
@@ -43,7 +46,7 @@ function SignOn() {
   const [detailsChanged, setDetailsChanged] = useState(false);
 
   const toJson = () => {
-    let uuid = detailsChanged === true ? null : profile.uuid;
+    let uuid = detailsChanged === true ? null : profile.value.uuid;
 
     return JSON.stringify({
       firstName: firstName,
@@ -81,8 +84,8 @@ function SignOn() {
 
     if (cookies.lastCrew) {
       loadCrew(cookies.lastCrew);
-    } else if (profile.isLoggedIn === true) {
-      loadCrew(profile.uuid);
+    } else if (isAuthenticated) {
+      loadCrewData(profile.value);
     }
     if (boatIdValue && loading !== "") {
       loadBoat();
