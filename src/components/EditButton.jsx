@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { OverlayTrigger, Button, Tooltip } from "react-bootstrap";
 import { ownsBoat } from "../common/Utils";
+import EditIcon from '@mui/icons-material/Edit';
 
 const EditButton = ({boat, editModeCallback}) => {
   const profile = useSelector((state) => state.profile);
@@ -23,7 +24,7 @@ const EditButton = ({boat, editModeCallback}) => {
             editModeCallback(true);
           }}
         >
-          Edit
+          <EditIcon/>
         </Button>
       </span>
     </OverlayTrigger>

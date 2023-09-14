@@ -4,7 +4,7 @@ import { useProfile } from "../common/Profile";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setProfile } from "../features/profileSlice";
-import { Button, ListGroup } from "react-bootstrap";
+import { Button, Form, ListGroup } from "react-bootstrap";
 import { ListItem } from "@mui/material";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
@@ -68,6 +68,18 @@ export const Request = (props) => {
           .then(response => console.log("success"));
       });
   };
+
+  const formatAction = (action) => {
+    const actionMapping = {
+      "remove": "Remove owner",
+      "sole": "Take sole ownership",
+      "partner": "Add the user as a partner",
+      "other": "Other... contact user for more information"
+    }
+
+    return actionMapping[action];
+  };
+
   let approvedEnabled = props.request.status === "APPROVED" || props.request.status === "REJECTED" ?
   {
     colour: "secondary",
@@ -82,7 +94,11 @@ export const Request = (props) => {
   return (
     <>
     <ListItem className="list-group-item d-flex">
-      <div style={{flex: 'auto'}}>{props.request.submitted+" "+props.request.boatName}</div>      
+      <div style={{flex: 'auto'}}>
+        <div><div>{props.request.submitted+" "+props.request.boatName}</div></div>
+        <div className="mb-0"><label className="form-label fw-bold mb-0">Submitted By:</label><input type="text" className="mb-0" style={{marginLeft: "10px", border:0}} value={props.request.submittedBy} readOnly/></div>
+        <div><label className="form-label fw-bold">Action:</label><input type="text" style={{marginLeft: "10px", border:0}} value={formatAction(props.request.requestType)} readOnly/></div>
+      </div>
       <div><span  style={{marginRight: '5px'}} className="badge bg-primary rounded-pill">{props.request.status}</span></div>
       <div>
         <Button style={{marginRight: '5px'}} variant={approvedEnabled.colour } onClick={approveRequestAction} disabled={approvedEnabled.enabled}><ThumbUpIcon/></Button>

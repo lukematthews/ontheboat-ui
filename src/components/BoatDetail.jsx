@@ -19,6 +19,8 @@ import EditButton from "./EditButton";
 import { Field } from "react-final-form";
 import { apiCall } from "../common/Utils";
 import { useAuth0 } from "@auth0/auth0-react";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from '@mui/icons-material/Cancel';
 
 const BoatDetail = ({ boat, editable, save, dialogMode }) => {
   const profile = useSelector((state) => state.profile);
@@ -284,17 +286,21 @@ const BoatDetail = ({ boat, editable, save, dialogMode }) => {
               }}
             >
               {editMode && editable ? (
-                <div style={{flexDirection: "column"}}>
-
-                  <div className="mb-1" style={{ justifyContent: "center", display: "flex" }}>
-                    <Button type="submit">Save</Button>
+                <div style={{ flexDirection: "column" }}>
+                  <div
+                    className="mb-1"
+                    style={{ justifyContent: "center", display: "flex" }}
+                  >
+                    <Button type="submit">
+                      <SaveIcon />
+                    </Button>
                   </div>
                   <div style={{ justifyContent: "center", display: "flex" }}>
-                    <Button onClick={() => setEditMode(false)}>Cancel</Button>
+                    <Button onClick={() => setEditMode(false)}><CancelIcon/></Button>
                   </div>
                 </div>
               ) : (
-                <div stlye={{display: "flex", justifyContent: "center"}}>
+                <div stlye={{ display: "flex", justifyContent: "center" }}>
                   <EditButton
                     boat={boat}
                     editModeCallback={setEditMode}
