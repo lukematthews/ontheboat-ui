@@ -15,9 +15,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useAuth0 } from "@auth0/auth0-react";
 import Loading from "./components/Loading";
+import { useProfile } from "./common/Profile";
 
 function App() {
   const { isLoading, error } = useAuth0();
+  const profile = useProfile();
 
   if (error) {
     return <div>Oops... {error.message}</div>;

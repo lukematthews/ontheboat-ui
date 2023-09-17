@@ -1,6 +1,5 @@
 import { apiCall, apiCallPromise, FormField } from "../common/Utils";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useProfile } from "../common/Profile";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setProfile } from "../features/profileSlice";
@@ -10,8 +9,6 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import CancelIcon from '@mui/icons-material/Cancel';
 export const Admin = (props) => {
-  const profile = useProfile();
-  const editableProfile = Object.assign({}, profile);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
 
@@ -26,26 +23,6 @@ export const Admin = (props) => {
       }).then((response) => setRequests(response));
     });
   }, [user]);
-
-  const onSubmit = (e) => {
-    const getToken = async () => {
-      await getAccessTokenSilently().then((token) => {
-        apiCall({
-          endpoint: "/crew/profile",
-          body: e,
-          jwt: token,
-          method: "PUT",
-          handlerCallback: (response) => {
-            console.log(response);
-            // display success dialog.
-            setOpen(true);
-            dispatch(setProfile({ ...response }));
-          },
-        });
-      });
-    };
-    getToken();
-  };
 
   return (
     <>
